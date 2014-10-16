@@ -39,7 +39,7 @@ public:
 		Body * m_pBody;
 	};
 
-	explicit	World		(const vec2 & gravity);
+	explicit	World		(float x, float y);
 
 	void		update		(float dt);
 

@@ -4,8 +4,7 @@
 
 int main (int argc, char ** argv)
 {
-	gravity11::vec2 gravity(0.0f, -9.8f);
-	gravity11::World world(gravity);
+	gravity11::World world(0.0f, -9.8f);
 
 	world.CreateBody(0.0f, 0.0f);
 

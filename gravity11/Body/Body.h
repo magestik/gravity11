@@ -31,7 +31,10 @@ public:
 
 	explicit	Body	(const vec2 & v);
 
-	void		applyLinearImpulse	(const vec2 & f);
+	void		setStatic		(void);
+	void		setDynamic		(void);
+
+	void		applyLinearImpulse	(float x, float y);
 
 	vec2 & getPosition() { return(m_vPosition); }
 private:

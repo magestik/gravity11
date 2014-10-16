@@ -34,14 +34,30 @@ Body::Body(const vec2 & v)
 }
 
 /**
+ * @brief Body::setStatic
+ */
+void Body::setStatic(void)
+{
+	m_flags &= ~DYNAMIC;
+}
+
+/**
+ * @brief Body::setDynamic
+ */
+void Body::setDynamic(void)
+{
+	m_flags |= DYNAMIC;
+}
+
+/**
  * @brief Body::applyLinearImpulse
  * @param f
  */
-void Body::applyLinearImpulse(const vec2 & f)
+void Body::applyLinearImpulse(float x, float y)
 {
 	if (m_flags & DYNAMIC)
 	{
-		m_vVelocity = m_vVelocity + f;
+		m_vVelocity = m_vVelocity + vec2(x, y);
 		m_flags |= SIMULATING;
 	}
 }

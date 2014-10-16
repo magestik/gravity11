@@ -24,8 +24,8 @@ namespace gravity11
  * @brief World::World
  * @param gravity
  */
-World::World(const vec2 & gravity)
-: m_vGravity(gravity)
+World::World(float x, float y)
+: m_vGravity(x, y)
 , m_fTimeRemaining(0.0f)
 , m_fTimeStepDuration(1.0f / 60.0f)
 , m_iCount(0)
