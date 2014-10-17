@@ -25,9 +25,8 @@ namespace gravity11
  * @brief Circle::Circle
  */
 Circle::Circle(void)
-: Shape(CIRCLE)
 {
-    // ...
+	// ...
 }
 
 /**
@@ -35,7 +34,7 @@ Circle::Circle(void)
  */
 Circle::~Circle(void)
 {
-    // ...
+	// ...
 }
 
 }

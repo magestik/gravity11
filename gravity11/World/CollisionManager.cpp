@@ -17,6 +17,8 @@
 
 #include "CollisionManager.h"
 
+#include "../Body/Shape/Shape.h"
+
 namespace gravity11
 {
 
@@ -25,7 +27,7 @@ namespace gravity11
  */
 CollisionManager::CollisionManager(void)
 {
-    // ...
+	// ...
 }
 
 /**
@@ -33,7 +35,7 @@ CollisionManager::CollisionManager(void)
  */
 CollisionManager::~CollisionManager(void)
 {
-    // ...
+	// ...
 }
 
 /**
@@ -41,12 +43,173 @@ CollisionManager::~CollisionManager(void)
  * @param b1
  * @param b2
  */
-void CollisionManager::handleIntersections(Body * b1, Body * b2)
+bool CollisionManager::handleIntersection(Body * b1, Body * b2)
 {
-    Shape * s1 = b1->getShape();
-    Shape * s2 = b2->getShape();
+	bool collision = false;
 
-    //s1->getType()
+	Shape * pShape = b1->getShape();
+
+	switch (pShape->getType())
+	{
+		case Shape::BOX:
+		{
+			BodyPtr<Box> pTypedBody(b1);
+			collision = handleIntersection(pTypedBody, b2);
+		}
+		break;
+
+		case Shape::CIRCLE:
+		{
+			BodyPtr<Circle> pTypedBody(b1);
+			collision = handleIntersection(pTypedBody, b2);
+		}
+		break;
+
+		case Shape::SEGMENT:
+		{
+			BodyPtr<Segment> pTypedBody(b1);
+			collision = handleIntersection(pTypedBody, b2);
+		}
+		break;
+	}
+
+	return(collision);
+}
+
+/**
+ *
+ */
+template<typename T>
+bool CollisionManager::handleIntersection(BodyPtr<T> & pTypedBody1, Body * b2)
+{
+	bool collision = false;
+
+	Shape * pShape = b2->getShape();
+
+	switch (pShape->getType())
+	{
+		case Shape::BOX:
+		{
+			BodyPtr<Box> pTypedBody2(b2);
+			collision = handleIntersection(pTypedBody1, pTypedBody2);
+		}
+		break;
+
+		case Shape::CIRCLE:
+		{
+			BodyPtr<Circle> pTypedBody2(b2);
+			collision = handleIntersection(pTypedBody1, pTypedBody2);
+		}
+		break;
+
+		case Shape::SEGMENT:
+		{
+			BodyPtr<Segment> pTypedBody2(b2);
+			collision = handleIntersection(pTypedBody1, pTypedBody2);
+		}
+		break;
+	}
+
+	return(collision);
+}
+
+/**
+ * @brief CollisionManager::handleIntersection
+ * @param pBox
+ * @param pShape
+ * @return
+ */
+bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Box> & pShape)
+{
+	return(false);
+}
+
+/**
+ * @brief CollisionManager::handleIntersection
+ * @param pBox
+ * @param pShape
+ * @return
+ */
+bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Circle> & pShape)
+{
+	return(false);
+}
+
+/**
+ * @brief CollisionManager::handleIntersection
+ * @param pBox
+ * @param pShape
+ * @return
+ */
+bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Segment> & pShape)
+{
+	return(false);
+}
+
+/**
+ * @brief CollisionManager::handleIntersection
+ * @param pCircle
+ * @param pShape
+ * @return
+ */
+bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Box> & pShape)
+{
+	return(false);
+}
+
+/**
+ * @brief CollisionManager::handleIntersection
+ * @param pCircle
+ * @param pShape
+ * @return
+ */
+bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Circle> & pShape)
+{
+	return(false);
+}
+
+/**
+ * @brief CollisionManager::handleIntersection
+ * @param pCircle
+ * @param pShape
+ * @return
+ */
+bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Segment> & pShape)
+{
+	return(false);
+}
+
+/**
+ * @brief CollisionManager::handleIntersection
+ * @param pSegment
+ * @param pShape
+ * @return
+ */
+bool CollisionManager::handleIntersection(BodyPtr<Segment> & pSegment, BodyPtr<Box> & pShape)
+{
+	return(false);
+}
+
+/**
+ * @brief CollisionManager::handleIntersection
+ * @param pSegment
+ * @param pShape
+ * @return
+ */
+bool CollisionManager::handleIntersection(BodyPtr<Segment> & pSegment, BodyPtr<Circle> & pShape)
+{
+	return(false);
+}
+
+/**
+ * @brief CollisionManager::handleIntersection
+ * @param pSegment
+ * @param pShape
+ * @return
+ */
+bool CollisionManager::handleIntersection(BodyPtr<Segment> & pSegment, BodyPtr<Segment> & pShape)
+{
+	return(false);
 }
 
 }

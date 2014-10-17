@@ -23,10 +23,9 @@ namespace gravity11
 /**
  * @brief Shape::Shape
  */
-Shape::Shape(EType type)
-: m_eType(type)
+Shape::Shape(void)
 {
-    // ...
+	// ...
 }
 
 /**
@@ -34,7 +33,7 @@ Shape::Shape(EType type)
  */
 Shape::~Shape(void)
 {
-    // ...
+	// ...
 }
 
 }

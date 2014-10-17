@@ -18,26 +18,26 @@
 namespace gravity11
 {
 
+class Box;
+class Circle;
+class Segment;
+
 class Shape
 {
 
 public:
 
-    enum EType
-    {
-        BOX,
-        CIRCLE,
-        SEGMENT
-    };
+	enum EType
+	{
+		BOX,
+		CIRCLE,
+		SEGMENT
+	};
 
-    explicit Shape(EType type);
-    virtual ~Shape(void);
+	explicit Shape(void);
+	virtual ~Shape(void);
 
-    virtual EType getType(void) = 0;
-
-protected:
-
-    EType m_eType;
+	virtual EType getType(void) = 0;
 
 };
 

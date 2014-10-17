@@ -25,9 +25,8 @@ namespace gravity11
  * @brief Box::Box
  */
 Box::Box(void)
-: Shape(BOX)
 {
-    // ...
+	// ...
 }
 
 /**
@@ -35,7 +34,7 @@ Box::Box(void)
  */
 Box::~Box(void)
 {
-    // ...
+	// ...
 }
 
 }

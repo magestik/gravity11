@@ -25,9 +25,8 @@ namespace gravity11
  * @brief Segment::Segment
  */
 Segment::Segment(void)
-: Shape(SEGMENT)
 {
-    // ...
+	// ...
 }
 
 /**
@@ -35,7 +34,7 @@ Segment::Segment(void)
  */
 Segment::~Segment(void)
 {
-    // ...
+	// ...
 }
 
 }
