@@ -50,6 +50,10 @@ public:
 	const vec2 &    getPosition(void) const { return(m_vPosition); }
 	float           getRotation(void) const { return(m_fRotation); }
 
+	vec2 &          getLinearVelocity(void) { return(m_vLinearVelocity); }
+	const vec2 &    getLinearVelocity(void) const { return(m_vLinearVelocity); }
+	float			getAngularVelocity(void) const { return(m_fAngularVelocity); }
+
 	Shape *         getShape(void) { return(m_pShape); }
 
 private:

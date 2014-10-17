@@ -18,6 +18,9 @@
 #include "CollisionManager.h"
 
 #include "../Body/Shape/Shape.h"
+#include "../Body/Shape/Box.h"
+#include "../Body/Shape/Circle.h"
+#include "../Body/Shape/Segment.h"
 
 namespace gravity11
 {
@@ -132,7 +135,7 @@ bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Box> & pS
  */
 bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Circle> & pShape)
 {
-	return(false);
+	return(handleIntersection(pShape, pBox));
 }
 
 /**
@@ -154,7 +157,43 @@ bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Segment> 
  */
 bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Box> & pShape)
 {
-	return(false);
+	const vec2 & pos1	= pCircle.getPosition();
+	const vec2 & pos2	= pShape.getPosition();
+
+	float halfWidth		= pShape.getShape()->getHalfWidth();
+	float halfHeight	= pShape.getShape()->getHalfHeight();
+	float radius		= pCircle.getShape()->getRadius();
+
+	// Test X-distance
+	float dx = fabs(pos1.x - pos2.x);
+
+	if (dx > (halfWidth + radius))
+	{
+		return(false);
+	}
+
+	// Test Y-distance
+	float dy = fabs(pos1.y - pos2.y);
+
+	if (dy > (halfHeight + radius))
+	{
+		return(false);
+	}
+
+	// Is the collision happening ?
+	if (dx <= halfWidth || dy <= halfHeight)
+	{
+		return(true);
+	}
+
+	// Test corner distance
+	float cornerDistX = dx - halfWidth;
+	float cornerDistY = dy - halfHeight;
+
+	float d = (cornerDistX*cornerDistX) + (cornerDistY*cornerDistY);
+	float r = radius * radius;
+
+	return(d < r);
 }
 
 /**
@@ -165,7 +204,17 @@ bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Box
  */
 bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Circle> & pShape)
 {
-	return(false);
+	const vec2 & pos1	= pCircle.getPosition();
+	const vec2 & pos2	= pShape.getPosition();
+	float radius		= pCircle.getShape()->getRadius() + pShape.getShape()->getRadius();
+
+	float dx = fabs(pos1.x - pos2.x);
+	float dy = fabs(pos1.x - pos2.x);
+
+	float d = (dx*dx) + (dy*dy);
+	float r = radius * radius;
+
+	return(d < r);
 }
 
 /**
@@ -176,7 +225,7 @@ bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Cir
  */
 bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Segment> & pShape)
 {
-	return(false);
+	return(handleIntersection(pShape, pCircle));
 }
 
 /**
@@ -187,7 +236,7 @@ bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Seg
  */
 bool CollisionManager::handleIntersection(BodyPtr<Segment> & pSegment, BodyPtr<Box> & pShape)
 {
-	return(false);
+	return(handleIntersection(pShape, pSegment));
 }
 
 /**

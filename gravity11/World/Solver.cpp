@@ -42,20 +42,26 @@ void Solver::simulate(float dt)
 		applyForcesOnBody(pBody, dt);
 	}
 
+	int pair_count = 0;
+
 	for (auto it1 = m_World.begin(), end = m_World.end(); it1 != end; ++it1)
 	{
-		for (auto it2 = it1; it2 != end; ++it2)
+		auto tmp = it1; ++tmp;
+
+		for (auto it2 = tmp; it2 != end; ++it2)
 		{
+			++pair_count;
+
 			bool collision = m_CollisionManager.handleIntersection(*it1, *it2);
 
 			if (collision)
 			{
-				int a = 1;
+				// This is only temporary ... to test basic collision
+				(*it1)->applyForce((*it1)->getLinearVelocity()*-100);
+				(*it2)->applyForce((*it2)->getLinearVelocity()*-100);
 			}
 		}
 	}
-
-	// TODO : detect collisions
 
 	for (Body * pBody : m_World)
 	{

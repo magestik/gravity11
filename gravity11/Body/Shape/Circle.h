@@ -30,6 +30,7 @@ public:
 
 	virtual ShapeType getType(void) { return(CIRCLE); }
 
+	float getRadius(void) { return(m_fRadius); }
 private:
 
 	float m_fRadius;
