@@ -18,19 +18,21 @@
 namespace gravity11
 {
 
+class CircleAttributes;
+
 class Circle : public Shape
 {
 
 public:
 
-    explicit Circle(void);
-    virtual ~Circle(void);
+	explicit Circle(const CircleAttributes & attr);
+	virtual ~Circle(void);
 
-    virtual Shape::EType getType(void) { return(CIRCLE); }
+	virtual ShapeType getType(void) { return(CIRCLE); }
 
 private:
 
-    float m_fRadius;
+	float m_fRadius;
 
 };
 

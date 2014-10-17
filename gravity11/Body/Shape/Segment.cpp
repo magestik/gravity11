@@ -24,7 +24,9 @@ namespace gravity11
 /**
  * @brief Segment::Segment
  */
-Segment::Segment(void)
+Segment::Segment(const SegmentAttributes & attr)
+: m_fLength(attr.length)
+, m_vNormal(1.0f, 0.0f)
 {
 	// ...
 }

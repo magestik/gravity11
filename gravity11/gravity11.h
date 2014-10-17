@@ -13,8 +13,49 @@
  * License along with this library.
  */
 
+#pragma once
+
 #include "Maths/Vector2.h"
 
 #include "Body/Body.h"
 
 #include "World/World.h"
+
+namespace gravity11
+{
+	enum ShapeType
+	{
+		BOX,
+		CIRCLE,
+		SEGMENT
+	};
+
+	struct BodyModel
+	{
+		vec2 position = vec2(0.0f, 0.0f);
+		float rotation = 0.0f;
+
+		float linearMass = 1.0f;
+		float angularMass = 1.0f;
+
+		bool dynamic = true;
+	};
+
+	struct BoxAttributes
+	{
+		float width = 1.0f;
+		float height = 1.0f;
+	};
+
+	struct CircleAttributes
+	{
+		float radius = 1.0f;
+	};
+
+	struct SegmentAttributes
+	{
+		float length = 1.0f;
+		float orientation = 1.0f;
+	};
+}
+

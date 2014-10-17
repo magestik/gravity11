@@ -19,6 +19,11 @@
 
 #include "Solver.h"
 
+#include "../Body/Shape/Shape.h"
+#include "../Body/Shape/Box.h"
+#include "../Body/Shape/Circle.h"
+#include "../Body/Shape/Segment.h"
+
 namespace gravity11
 {
 
@@ -52,7 +57,46 @@ void World::update(float dt)
 	for (int i = 0; i < step; ++i)
 	{
 		m_pSolver->simulate(m_fTimeStepDuration);
-	}
+		}
+}
+
+/**
+ * @brief World::CreateBody
+ * @param model
+ * @param attr
+ * @param count
+ * @return
+ */
+Body * World::CreateBody(const BodyModel & model, const BoxAttributes & attr, int count)
+{
+	Box * pShape = new Box(attr);
+	return(CreateBody(model, pShape, count));
+}
+
+/**
+ * @brief World::CreateBody
+ * @param model
+ * @param attr
+ * @param count
+ * @return
+ */
+Body * World::CreateBody(const BodyModel & model, const CircleAttributes attr, int count)
+{
+	Circle * pShape = new Circle(attr);
+	return(CreateBody(model, pShape, count));
+}
+
+/**
+ * @brief World::CreateBody
+ * @param model
+ * @param attr
+ * @param count
+ * @return
+ */
+Body * World::CreateBody(const BodyModel & model, const SegmentAttributes & attr, int count)
+{
+	Segment * pShape = new Segment(attr);
+	return(CreateBody(model, pShape, count));
 }
 
 /**
@@ -60,24 +104,31 @@ void World::update(float dt)
  * @param position
  * @return
  */
-Body * World::CreateBody(float x, float y)
+Body * World::CreateBody(const BodyModel & model, Shape * pShape, int count)
 {
-	vec2 position (x,y);
+	Body * first = new Body(model, pShape);
 
-	Body * b = new Body(position);
-
-	if (0 == m_iCount++)
+	if (0 == m_iCount)
 	{
-		m_pFirstBody = b;
-		m_pLastBody = b;
+		m_pFirstBody = first;
+		m_pLastBody = first;
 	}
 	else
 	{
+		m_pLastBody->m_pNextBody = first;
+		m_pLastBody = first;
+	}
+
+	for (int i = 1; i < count; ++i)
+	{
+		Body * b = new Body(model, pShape);
 		m_pLastBody->m_pNextBody = b;
 		m_pLastBody = b;
 	}
 
-	return(b);
+	m_iCount += count;
+
+	return(first);
 }
 
 }

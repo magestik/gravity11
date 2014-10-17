@@ -24,7 +24,8 @@ namespace gravity11
 /**
  * @brief Circle::Circle
  */
-Circle::Circle(void)
+Circle::Circle(const CircleAttributes & attr)
+: m_fRadius(attr.radius)
 {
 	// ...
 }

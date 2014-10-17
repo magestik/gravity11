@@ -42,11 +42,24 @@ void Solver::simulate(float dt)
 		applyForcesOnBody(pBody, dt);
 	}
 
+	for (auto it1 = m_World.begin(), end = m_World.end(); it1 != end; ++it1)
+	{
+		for (auto it2 = it1; it2 != end; ++it2)
+		{
+			bool collision = m_CollisionManager.handleIntersection(*it1, *it2);
+
+			if (collision)
+			{
+				int a = 1;
+			}
+		}
+	}
+
 	// TODO : detect collisions
 
 	for (Body * pBody : m_World)
 	{
-        applyVelocitiesOnBody(pBody, dt);
+		applyVelocitiesOnBody(pBody, dt);
 	}
 }
 
@@ -59,9 +72,9 @@ void Solver::applyForcesOnBody(Body * pBody, float dt)
 {
 	if (pBody->m_flags & Body::DYNAMIC)
 	{
-        pBody->resetForces(m_World.m_vGravity);
+		pBody->resetForces(m_World.m_vGravity);
 
-        // TODO : apply other forces here
+		// TODO : apply other forces here
 	}
 }
 
@@ -73,11 +86,11 @@ void Solver::applyVelocitiesOnBody(Body * pBody, float dt)
 {
 	if (pBody->m_flags & Body::DYNAMIC)
 	{
-        pBody->m_vLinearVelocity    = pBody->m_vLinearVelocity + pBody->m_vAcceleration * dt;
-        pBody->m_vPosition          = pBody->m_vPosition + pBody->m_vLinearVelocity * dt;
+		pBody->m_vLinearVelocity    = pBody->m_vLinearVelocity + pBody->m_vAcceleration * dt;
+		pBody->m_vPosition          = pBody->m_vPosition + pBody->m_vLinearVelocity * dt;
 
-        pBody->m_fAngularVelocity   = pBody->m_fAngularVelocity + pBody->m_fTorque * dt;
-        pBody->m_fRotation          = pBody->m_fRotation + pBody->m_fAngularVelocity * dt;
+		pBody->m_fAngularVelocity   = pBody->m_fAngularVelocity + pBody->m_fTorque * dt;
+		pBody->m_fRotation          = pBody->m_fRotation + pBody->m_fAngularVelocity * dt;
 
 		//onUpdate();
 	}

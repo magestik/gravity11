@@ -51,21 +51,21 @@ bool CollisionManager::handleIntersection(Body * b1, Body * b2)
 
 	switch (pShape->getType())
 	{
-		case Shape::BOX:
+		case BOX:
 		{
 			BodyPtr<Box> pTypedBody(b1);
 			collision = handleIntersection(pTypedBody, b2);
 		}
 		break;
 
-		case Shape::CIRCLE:
+		case CIRCLE:
 		{
 			BodyPtr<Circle> pTypedBody(b1);
 			collision = handleIntersection(pTypedBody, b2);
 		}
 		break;
 
-		case Shape::SEGMENT:
+		case SEGMENT:
 		{
 			BodyPtr<Segment> pTypedBody(b1);
 			collision = handleIntersection(pTypedBody, b2);
@@ -88,21 +88,21 @@ bool CollisionManager::handleIntersection(BodyPtr<T> & pTypedBody1, Body * b2)
 
 	switch (pShape->getType())
 	{
-		case Shape::BOX:
+		case BOX:
 		{
 			BodyPtr<Box> pTypedBody2(b2);
 			collision = handleIntersection(pTypedBody1, pTypedBody2);
 		}
 		break;
 
-		case Shape::CIRCLE:
+		case CIRCLE:
 		{
 			BodyPtr<Circle> pTypedBody2(b2);
 			collision = handleIntersection(pTypedBody1, pTypedBody2);
 		}
 		break;
 
-		case Shape::SEGMENT:
+		case SEGMENT:
 		{
 			BodyPtr<Segment> pTypedBody2(b2);
 			collision = handleIntersection(pTypedBody1, pTypedBody2);

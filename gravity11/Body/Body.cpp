@@ -17,6 +17,8 @@
 
 #include "Body.h"
 
+#include <assert.h>
+
 namespace gravity11
 {
 
@@ -24,20 +26,25 @@ namespace gravity11
  * @brief Body::Body
  * @param v
  */
-Body::Body(const vec2 & v)
-: m_vPosition(v)
-, m_fRotation(0.0f)
+Body::Body(const BodyModel & model, Shape * pShape)
+: m_vPosition(model.position)
+, m_fRotation(model.rotation)
 , m_vLinearVelocity(0.0f, 0.0f)
 , m_fAngularVelocity(0.0f)
 , m_vAcceleration(0.0f, 0.0f)
 , m_fTorque(0.0f)
 , m_fLinearMass(1.0f)
 , m_fAngularMass(1.0f)
-, m_flags(DYNAMIC | SIMULATING)
-, m_pShape(nullptr)
+, m_flags(SIMULATING)
+, m_pShape(pShape)
 , m_pNextBody(nullptr)
 {
+	assert(nullptr != m_pShape);
 
+	if (model.dynamic)
+	{
+		setDynamic();
+	}
 }
 
 /**
@@ -53,7 +60,7 @@ void Body::setStatic(void)
  */
 void Body::setDynamic(void)
 {
-    m_flags |= DYNAMIC;
+	m_flags |= DYNAMIC;
 }
 
 /**
@@ -62,10 +69,10 @@ void Body::setDynamic(void)
  */
 void Body::resetForces(const vec2 & force)
 {
-    if (m_flags & DYNAMIC)
-    {
-        m_vAcceleration = (force / m_fLinearMass);
-    }
+	if (m_flags & DYNAMIC)
+	{
+		m_vAcceleration = (force / m_fLinearMass);
+	}
 }
 
 /**
@@ -74,7 +81,7 @@ void Body::resetForces(const vec2 & force)
  */
 void Body::applyForce(float x, float y)
 {
-    applyForce(vec2(x, y));
+	applyForce(vec2(x, y));
 }
 
 /**
@@ -83,11 +90,11 @@ void Body::applyForce(float x, float y)
  */
 void Body::applyForce(const vec2 & force)
 {
-    if (m_flags & DYNAMIC)
-    {
-        m_vAcceleration = m_vAcceleration + (force / m_fLinearMass);
-        m_flags |= SIMULATING;
-    }
+	if (m_flags & DYNAMIC)
+	{
+		m_vAcceleration = m_vAcceleration + (force / m_fLinearMass);
+		m_flags |= SIMULATING;
+	}
 }
 
 /**
@@ -97,13 +104,13 @@ void Body::applyForce(const vec2 & force)
  */
 void Body::applyForce(const vec2 & force, const vec2 & point)
 {
-    if (m_flags & DYNAMIC)
-    {
-        float torque = cross(point - m_vPosition, force);
-        applyTorque(torque);
-        applyForce(force.x, force.y);
-        m_flags |= SIMULATING;
-    }
+	if (m_flags & DYNAMIC)
+	{
+		float torque = cross(point - m_vPosition, force);
+		applyTorque(torque);
+		applyForce(force.x, force.y);
+		m_flags |= SIMULATING;
+	}
 }
 
 /**
@@ -112,11 +119,11 @@ void Body::applyForce(const vec2 & force, const vec2 & point)
  */
 void Body::applyTorque(float torque)
 {
-    if (m_flags & DYNAMIC)
-    {
-        m_fTorque = m_fTorque + (torque / m_fAngularMass);
-        m_flags |= SIMULATING;
-    }
+	if (m_flags & DYNAMIC)
+	{
+		m_fTorque = m_fTorque + (torque / m_fAngularMass);
+		m_flags |= SIMULATING;
+	}
 }
 
 /**
@@ -127,7 +134,7 @@ void Body::applyLinearImpulse(float x, float y)
 {
 	if (m_flags & DYNAMIC)
 	{
-        m_vLinearVelocity = m_vLinearVelocity + vec2(x, y);
+		m_vLinearVelocity = m_vLinearVelocity + vec2(x, y);
 		m_flags |= SIMULATING;
 	}
 }
@@ -138,11 +145,11 @@ void Body::applyLinearImpulse(float x, float y)
  */
 void Body::applyAngularImpulse(float a)
 {
-    if (m_flags & DYNAMIC)
-    {
-        m_fAngularVelocity = m_fAngularVelocity + a;
-        m_flags |= SIMULATING;
-    }
+	if (m_flags & DYNAMIC)
+	{
+		m_fAngularVelocity = m_fAngularVelocity + a;
+		m_flags |= SIMULATING;
+	}
 }
 
 }

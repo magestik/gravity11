@@ -18,19 +18,21 @@
 namespace gravity11
 {
 
+class BoxAttributes;
+
 class Box : public Shape
 {
 
 public:
 
-    explicit Box(void);
-    virtual ~Box(void);
+	explicit Box(const BoxAttributes & attr);
+	virtual ~Box(void);
 
-    virtual Shape::EType getType(void) { return(BOX); }
+	virtual ShapeType getType(void) { return(BOX); }
 
 private:
 
-    vec2 m_vSize;
+	vec2 m_vSize;
 
 };
 

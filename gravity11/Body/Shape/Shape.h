@@ -27,17 +27,10 @@ class Shape
 
 public:
 
-	enum EType
-	{
-		BOX,
-		CIRCLE,
-		SEGMENT
-	};
-
 	explicit Shape(void);
 	virtual ~Shape(void);
 
-	virtual EType getType(void) = 0;
+	virtual ShapeType getType(void) = 0;
 
 };
 

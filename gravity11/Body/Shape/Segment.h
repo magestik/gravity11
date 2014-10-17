@@ -18,20 +18,22 @@
 namespace gravity11
 {
 
+class SegmentAttributes;
+
 class Segment : public Shape
 {
 
 public:
 
-    explicit Segment(void);
-    virtual ~Segment(void);
+	explicit Segment(const SegmentAttributes & attr);
+	virtual ~Segment(void);
 
-    virtual Shape::EType getType(void) { return(SEGMENT); }
+	virtual ShapeType getType(void) { return(SEGMENT); }
 
 private:
 
-    float m_fSize;
-    vec2 m_vNormal;
+	float m_fLength;
+	vec2 m_vNormal;
 
 };
 

@@ -21,6 +21,7 @@ namespace gravity11
 class Solver;
 class World;
 class Shape;
+class BodyModel;
 
 class Body
 {
@@ -30,26 +31,26 @@ friend class World;
 
 public:
 
-    explicit	Body                (const vec2 & v);
+	explicit	Body                (const BodyModel & v, Shape * pShape);
 
-    void		setStatic           (void);
-    void		setDynamic          (void);
+	void		setStatic           (void);
+	void		setDynamic          (void);
 
-    void        resetForces         (const vec2 & force);
+	void        resetForces         (const vec2 & force);
 
-    void        applyForce          (float x, float y);
-    void        applyForce          (const vec2 & force);
-    void        applyForce          (const vec2 & force, const vec2 & point);
-    void        applyTorque         (float torque);
+	void        applyForce          (float x, float y);
+	void        applyForce          (const vec2 & force);
+	void        applyForce          (const vec2 & force, const vec2 & point);
+	void        applyTorque         (float torque);
 
 	void		applyLinearImpulse	(float x, float y);
-    void		applyAngularImpulse	(float a);
+	void		applyAngularImpulse	(float a);
 
-    vec2 &          getPosition(void) { return(m_vPosition); }
-    const vec2 &    getPosition(void) const { return(m_vPosition); }
-    float           getRotation(void) const { return(m_fRotation); }
+	vec2 &          getPosition(void) { return(m_vPosition); }
+	const vec2 &    getPosition(void) const { return(m_vPosition); }
+	float           getRotation(void) const { return(m_fRotation); }
 
-    Shape *         getShape(void) { return(m_pShape); }
+	Shape *         getShape(void) { return(m_pShape); }
 
 private:
 
@@ -67,23 +68,23 @@ private:
 		SLEEPING	= 0x4,
 	};
 
-    vec2    m_vPosition;
-    float   m_fRotation;
+	vec2    m_vPosition;
+	float   m_fRotation;
 
-    vec2    m_vLinearVelocity;
-    float   m_fAngularVelocity;
+	vec2    m_vLinearVelocity;
+	float   m_fAngularVelocity;
 
-    vec2    m_vAcceleration;
-    float   m_fTorque;
+	vec2    m_vAcceleration;
+	float   m_fTorque;
 
-    float   m_fLinearMass;
-    float   m_fAngularMass;
+	float   m_fLinearMass;
+	float   m_fAngularMass;
 
-    int     m_flags;
+	int     m_flags;
 
-    Shape * m_pShape;
+	Shape * m_pShape;
 
-    Body *  m_pNextBody;
+	Body *  m_pNextBody;
 };
 
 }

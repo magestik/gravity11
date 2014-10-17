@@ -24,7 +24,8 @@ namespace gravity11
 /**
  * @brief Box::Box
  */
-Box::Box(void)
+Box::Box(const BoxAttributes & attr)
+: m_vSize(attr.width, attr.height)
 {
 	// ...
 }

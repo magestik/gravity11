@@ -6,7 +6,10 @@ int main (int argc, char ** argv)
 {
 	gravity11::World world(0.0f, -9.8f);
 
-	world.CreateBody(0.0f, 0.0f);
+	gravity11::BodyModel model;
+	gravity11::BoxAttributes box;
+
+	world.CreateBody(model, box);
 
 	float totalTime = 0.0f;
 
