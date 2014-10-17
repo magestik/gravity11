@@ -10,7 +10,7 @@ int main(int argc, char ** argv)
 		return(-1);
 	}
 
-	sf::Vector2u size(1280, 720);
+    sf::Vector2u size(800, 600);
 
 	if (3 == argc)
 	{
