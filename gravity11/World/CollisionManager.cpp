@@ -15,27 +15,39 @@
 
 #include <gravity11.h>
 
-#include "Shape.h"
-#include "Box.h"
+#include "CollisionManager.h"
 
 namespace gravity11
 {
 
 /**
- * @brief Box::Box
+ * @brief CollisionManager::CollisionManager
  */
-Box::Box(void)
-: Shape(BOX)
+CollisionManager::CollisionManager(void)
 {
     // ...
 }
 
 /**
- * @brief Box::Box
+ * @brief CollisionManager::~CollisionManager
  */
-Box::~Box(void)
+CollisionManager::~CollisionManager(void)
 {
     // ...
 }
 
+/**
+ * @brief CollisionManager::handleIntersections
+ * @param b1
+ * @param b2
+ */
+void CollisionManager::handleIntersections(Body * b1, Body * b2)
+{
+    Shape * s1 = b1->getShape();
+    Shape * s2 = b2->getShape();
+
+    //s1->getType()
 }
+
+}
+

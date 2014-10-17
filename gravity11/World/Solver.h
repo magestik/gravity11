@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "CollisionManager.h"
+
 namespace gravity11
 {
 
@@ -36,6 +38,7 @@ private:
 
 	World & m_World;
 
+    CollisionManager m_CollisionManager;
 };
 
 }

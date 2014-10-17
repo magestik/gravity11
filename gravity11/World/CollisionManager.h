@@ -13,29 +13,20 @@
  * License along with this library.
  */
 
-#include <gravity11.h>
-
-#include "Shape.h"
-#include "Box.h"
+#pragma once
 
 namespace gravity11
 {
 
-/**
- * @brief Box::Box
- */
-Box::Box(void)
-: Shape(BOX)
+class CollisionManager
 {
-    // ...
-}
 
-/**
- * @brief Box::Box
- */
-Box::~Box(void)
-{
-    // ...
-}
+public:
+
+    CollisionManager(void);
+    ~CollisionManager(void);
+
+    void handleIntersections(Body * b1, Body * b2);
+};
 
 }

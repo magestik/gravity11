@@ -25,6 +25,7 @@ namespace gravity11
  * @brief Circle::Circle
  */
 Circle::Circle(void)
+: Shape(CIRCLE)
 {
     // ...
 }

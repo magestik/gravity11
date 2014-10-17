@@ -30,10 +30,15 @@ public:
         SEGMENT
     };
 
-    explicit Shape(void);
+    explicit Shape(EType type);
     virtual ~Shape(void);
 
     virtual EType getType(void) = 0;
+
+protected:
+
+    EType m_eType;
+
 };
 
 }

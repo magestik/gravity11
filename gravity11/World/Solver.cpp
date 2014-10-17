@@ -15,6 +15,7 @@
 
 #include <gravity11.h>
 
+#include "CollisionManager.h"
 #include "Solver.h"
 
 namespace gravity11

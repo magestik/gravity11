@@ -49,6 +49,8 @@ public:
     const vec2 &    getPosition(void) const { return(m_vPosition); }
     float           getRotation(void) const { return(m_fRotation); }
 
+    Shape *         getShape(void) { return(m_pShape); }
+
 private:
 
 	// first bit
