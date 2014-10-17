@@ -45,7 +45,7 @@ void Solver::simulate(float dt)
 
 	for (Body * pBody : m_World)
 	{
-		updateBody(pBody, dt);
+        applyVelocitiesOnBody(pBody, dt);
 	}
 }
 
@@ -58,7 +58,9 @@ void Solver::applyForcesOnBody(Body * pBody, float dt)
 {
 	if (pBody->m_flags & Body::DYNAMIC)
 	{
-		pBody->m_vForces = pBody->m_vForces + m_World.m_vGravity * dt;
+        pBody->resetForces(m_World.m_vGravity);
+
+        // TODO : apply other forces here
 	}
 }
 
@@ -66,13 +68,15 @@ void Solver::applyForcesOnBody(Body * pBody, float dt)
  * @brief Solver::updateBody
  * @param pBody : body we want to update position/velocity
  */
-void Solver::updateBody(Body * pBody, float dt)
+void Solver::applyVelocitiesOnBody(Body * pBody, float dt)
 {
 	if (pBody->m_flags & Body::DYNAMIC)
 	{
-		vec2 acceleration = pBody->m_vForces / pBody->m_fMass;
-		pBody->m_vVelocity = pBody->m_vVelocity + acceleration * dt;
-		pBody->m_vPosition = pBody->m_vPosition + pBody->m_vVelocity * dt;
+        pBody->m_vLinearVelocity    = pBody->m_vLinearVelocity + pBody->m_vAcceleration * dt;
+        pBody->m_vPosition          = pBody->m_vPosition + pBody->m_vLinearVelocity * dt;
+
+        pBody->m_vAngularVelocity   = pBody->m_vAngularVelocity + pBody->m_fTorque * dt;
+        pBody->m_fRotation          = pBody->m_fRotation + pBody->m_vAngularVelocity * dt;
 
 		//onUpdate();
 	}

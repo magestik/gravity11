@@ -30,7 +30,7 @@ public:
 protected:
 
 	void applyForcesOnBody(Body * pBody, float dt);
-	void updateBody(Body * pBody, float dt);
+    void applyVelocitiesOnBody(Body * pBody, float dt);
 
 private:
 

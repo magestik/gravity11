@@ -24,9 +24,10 @@ namespace gravity11
  */
 Body::Body(const vec2 & v)
 : m_vPosition(v)
-, m_vVelocity(0.0f, 0.0f)
-, m_vForces(0.0f, 0.0f)
-, m_fMass(1.0f)
+, m_vLinearVelocity(0.0f, 0.0f)
+, m_vAcceleration(0.0f, 0.0f)
+, m_fLinearMass(1.0f)
+, m_fAngularMass(1.0f)
 , m_flags(DYNAMIC | SIMULATING)
 , m_pNextBody(nullptr)
 {
@@ -46,7 +47,70 @@ void Body::setStatic(void)
  */
 void Body::setDynamic(void)
 {
-	m_flags |= DYNAMIC;
+    m_flags |= DYNAMIC;
+}
+
+/**
+ * @brief Body::resetForces
+ * @param force
+ */
+void Body::resetForces(const vec2 & force)
+{
+    if (m_flags & DYNAMIC)
+    {
+        m_vAcceleration = (force / m_fLinearMass);
+    }
+}
+
+/**
+ * @brief Body::applyForce
+ * @param force
+ */
+void Body::applyForce(float x, float y)
+{
+    applyForce(vec2(x, y));
+}
+
+/**
+ * @brief Body::applyForce
+ * @param force
+ */
+void Body::applyForce(const vec2 & force)
+{
+    if (m_flags & DYNAMIC)
+    {
+        m_vAcceleration = m_vAcceleration + (force / m_fLinearMass);
+        m_flags |= SIMULATING;
+    }
+}
+
+/**
+ * @brief Body::applyForce
+ * @param force
+ * @param position
+ */
+void Body::applyForce(const vec2 & force, const vec2 & point)
+{
+    if (m_flags & DYNAMIC)
+    {
+        float torque = cross(point - m_vPosition, force);
+        applyTorque(torque);
+        applyForce(force.x, force.y);
+        m_flags |= SIMULATING;
+    }
+}
+
+/**
+ * @brief Body::applyTorque
+ * @param torque
+ */
+void Body::applyTorque(float torque)
+{
+    if (m_flags & DYNAMIC)
+    {
+        m_fTorque = m_fTorque + (torque / m_fAngularMass);
+        m_flags |= SIMULATING;
+    }
 }
 
 /**
@@ -57,9 +121,22 @@ void Body::applyLinearImpulse(float x, float y)
 {
 	if (m_flags & DYNAMIC)
 	{
-		m_vVelocity = m_vVelocity + vec2(x, y);
+        m_vLinearVelocity = m_vLinearVelocity + vec2(x, y);
 		m_flags |= SIMULATING;
 	}
+}
+
+/**
+ * @brief Body::applyAngularImpulse
+ * @param f
+ */
+void Body::applyAngularImpulse(float a)
+{
+    if (m_flags & DYNAMIC)
+    {
+        m_vAngularVelocity = m_vAngularVelocity + a;
+        m_flags |= SIMULATING;
+    }
 }
 
 }

@@ -29,14 +29,25 @@ friend class World;
 
 public:
 
-	explicit	Body	(const vec2 & v);
+    explicit	Body                (const vec2 & v);
 
-	void		setStatic		(void);
-	void		setDynamic		(void);
+    void		setStatic           (void);
+    void		setDynamic          (void);
+
+    void        resetForces         (const vec2 & force);
+
+    void        applyForce          (float x, float y);
+    void        applyForce          (const vec2 & force);
+    void        applyForce          (const vec2 & force, const vec2 & point);
+    void        applyTorque         (float torque);
 
 	void		applyLinearImpulse	(float x, float y);
+    void		applyAngularImpulse	(float a);
 
-	vec2 & getPosition() { return(m_vPosition); }
+    vec2 &          getPosition(void) { return(m_vPosition); }
+    const vec2 &    getPosition(void) const { return(m_vPosition); }
+    float           getRotation(void) const { return(m_fRotation); }
+
 private:
 
 	// first bit
@@ -53,14 +64,21 @@ private:
 		SLEEPING	= 0x4,
 	};
 
-	vec2 m_vPosition;
-	vec2 m_vVelocity;
-	vec2 m_vForces;
-	float m_fMass;
+    vec2    m_vPosition;
+    float   m_fRotation;
 
-	int m_flags;
+    vec2    m_vLinearVelocity;
+    float   m_vAngularVelocity;
 
-	Body * m_pNextBody;
+    vec2    m_vAcceleration;
+    float   m_fTorque;
+
+    float   m_fLinearMass;
+    float   m_fAngularMass;
+
+    int     m_flags;
+
+    Body *  m_pNextBody;
 };
 
 }

@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <math.h>
+
 namespace gravity11
 {
 
