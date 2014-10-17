@@ -15,6 +15,8 @@
 
 #include <gravity11.h>
 
+#include "Body.h"
+
 namespace gravity11
 {
 
@@ -24,11 +26,15 @@ namespace gravity11
  */
 Body::Body(const vec2 & v)
 : m_vPosition(v)
+, m_fRotation(0.0f)
 , m_vLinearVelocity(0.0f, 0.0f)
+, m_fAngularVelocity(0.0f)
 , m_vAcceleration(0.0f, 0.0f)
+, m_fTorque(0.0f)
 , m_fLinearMass(1.0f)
 , m_fAngularMass(1.0f)
 , m_flags(DYNAMIC | SIMULATING)
+, m_pShape(nullptr)
 , m_pNextBody(nullptr)
 {
 
@@ -134,7 +140,7 @@ void Body::applyAngularImpulse(float a)
 {
     if (m_flags & DYNAMIC)
     {
-        m_vAngularVelocity = m_vAngularVelocity + a;
+        m_fAngularVelocity = m_fAngularVelocity + a;
         m_flags |= SIMULATING;
     }
 }

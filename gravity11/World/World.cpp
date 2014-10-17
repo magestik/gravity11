@@ -15,6 +15,8 @@
 
 #include <gravity11.h>
 
+#include "World.h"
+
 #include "Solver.h"
 
 namespace gravity11

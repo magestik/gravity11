@@ -75,8 +75,8 @@ void Solver::applyVelocitiesOnBody(Body * pBody, float dt)
         pBody->m_vLinearVelocity    = pBody->m_vLinearVelocity + pBody->m_vAcceleration * dt;
         pBody->m_vPosition          = pBody->m_vPosition + pBody->m_vLinearVelocity * dt;
 
-        pBody->m_vAngularVelocity   = pBody->m_vAngularVelocity + pBody->m_fTorque * dt;
-        pBody->m_fRotation          = pBody->m_fRotation + pBody->m_vAngularVelocity * dt;
+        pBody->m_fAngularVelocity   = pBody->m_fAngularVelocity + pBody->m_fTorque * dt;
+        pBody->m_fRotation          = pBody->m_fRotation + pBody->m_fAngularVelocity * dt;
 
 		//onUpdate();
 	}

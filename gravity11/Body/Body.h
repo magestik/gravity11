@@ -20,6 +20,7 @@ namespace gravity11
 
 class Solver;
 class World;
+class Shape;
 
 class Body
 {
@@ -68,7 +69,7 @@ private:
     float   m_fRotation;
 
     vec2    m_vLinearVelocity;
-    float   m_vAngularVelocity;
+    float   m_fAngularVelocity;
 
     vec2    m_vAcceleration;
     float   m_fTorque;
@@ -77,6 +78,8 @@ private:
     float   m_fAngularMass;
 
     int     m_flags;
+
+    Shape * m_pShape;
 
     Body *  m_pNextBody;
 };
