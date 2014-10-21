@@ -132,22 +132,32 @@ void Body::applyTorque(float torque)
  */
 void Body::applyLinearImpulse(float x, float y)
 {
-	if (m_flags & DYNAMIC)
-	{
-		m_vLinearVelocity = m_vLinearVelocity + vec2(x, y);
-		m_flags |= SIMULATING;
-	}
+    applyLinearImpulse(vec2(x, y));
 }
+
+/**
+ * @brief Body::applyLinearImpulse
+ * @param f
+ */
+void Body::applyLinearImpulse(const vec2 & impulse)
+{
+    if (m_flags & DYNAMIC)
+    {
+        m_vLinearVelocity = m_vLinearVelocity + (impulse / m_fLinearMass);
+        m_flags |= SIMULATING;
+    }
+}
+
 
 /**
  * @brief Body::applyAngularImpulse
  * @param f
  */
-void Body::applyAngularImpulse(float a)
+void Body::applyAngularImpulse(float impulse)
 {
 	if (m_flags & DYNAMIC)
 	{
-		m_fAngularVelocity = m_fAngularVelocity + a;
+        m_fAngularVelocity = m_fAngularVelocity + (impulse / m_fAngularMass);
 		m_flags |= SIMULATING;
 	}
 }

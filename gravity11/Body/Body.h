@@ -44,7 +44,8 @@ public:
 	void        applyTorque         (float torque);
 
 	void		applyLinearImpulse	(float x, float y);
-	void		applyAngularImpulse	(float a);
+    void		applyLinearImpulse	(const vec2 & impulse);
+    void		applyAngularImpulse	(float impulse);
 
 	vec2 &          getPosition(void) { return(m_vPosition); }
 	const vec2 &    getPosition(void) const { return(m_vPosition); }
@@ -53,6 +54,9 @@ public:
 	vec2 &          getLinearVelocity(void) { return(m_vLinearVelocity); }
 	const vec2 &    getLinearVelocity(void) const { return(m_vLinearVelocity); }
 	float			getAngularVelocity(void) const { return(m_fAngularVelocity); }
+
+    float           getLinearMass(void) const { return(m_fLinearMass); }
+    float           getAngularMass(void) const { return(m_fAngularMass); }
 
 	Shape *         getShape(void) { return(m_pShape); }
 

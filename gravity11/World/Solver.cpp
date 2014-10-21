@@ -16,6 +16,7 @@
 #include <gravity11.h>
 
 #include "CollisionManager.h"
+#include "Collision.h"
 #include "Solver.h"
 
 namespace gravity11
@@ -35,38 +36,41 @@ Solver::Solver(World & world)
  * @brief Solver::simulate
  * @param dt
  */
-void Solver::simulate(float dt)
+void Solver::simulate(float total_dt)
 {
-	for (Body * pBody : m_World)
-	{
-		applyForcesOnBody(pBody, dt);
-	}
+    while (total_dt > 0.0001f)
+    {
+        float dt = total_dt; // TODO : find dt using continuous collision detection
 
-	int pair_count = 0;
+        for (auto it1 = m_World.begin(), end = m_World.end(); it1 != end; ++it1)
+        {
+            auto tmp = it1; ++tmp;
 
-	for (auto it1 = m_World.begin(), end = m_World.end(); it1 != end; ++it1)
-	{
-		auto tmp = it1; ++tmp;
+            for (auto it2 = tmp; it2 != end; ++it2)
+            {
+                Collision result;
+                bool collided = m_CollisionManager.handleIntersection(*it1, *it2, result);
 
-		for (auto it2 = tmp; it2 != end; ++it2)
-		{
-			++pair_count;
+                if (collided)
+                {
+                    vec2 vr = (*it1)->getLinearVelocity() - (*it2)->getLinearVelocity();
+                    float e = 10.0f;
+                    vec2 J = (vr * (e + 1.0f)) / ((1.0f/(*it1)->getLinearMass()) + (1.0f/(*it2)->getLinearMass()));
 
-			bool collision = m_CollisionManager.handleIntersection(*it1, *it2);
+                    (*it1)->applyLinearImpulse(J * result.normal);
+                    (*it2)->applyLinearImpulse(J * result.normal * -1);
+                }
+            }
+        }
 
-			if (collision)
-			{
-				// This is only temporary ... to test basic collision
-				(*it1)->applyForce((*it1)->getLinearVelocity()*-100);
-				(*it2)->applyForce((*it2)->getLinearVelocity()*-100);
-			}
-		}
-	}
+        for (Body * pBody : m_World)
+        {
+            applyVelocitiesOnBody(pBody, dt);
+            applyForcesOnBody(pBody, dt);
+        }
 
-	for (Body * pBody : m_World)
-	{
-		applyVelocitiesOnBody(pBody, dt);
-	}
+        total_dt -= dt;
+    }
 }
 
 /**

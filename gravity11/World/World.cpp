@@ -57,7 +57,7 @@ void World::update(float dt)
 	for (int i = 0; i < step; ++i)
 	{
 		m_pSolver->simulate(m_fTimeStepDuration);
-		}
+    }
 }
 
 /**

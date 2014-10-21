@@ -13,30 +13,12 @@
  * License along with this library.
  */
 
-#pragma once
+#include <gravity11.h>
+
+#include "Collision.h"
 
 namespace gravity11
 {
 
-class BoxAttributes;
-
-class Box : public Shape
-{
-
-public:
-
-	explicit Box(const BoxAttributes & attr);
-	virtual ~Box(void);
-
-	virtual ShapeType getType(void) { return(BOX); }
-
-    float getHalfWidth(void) const { return(m_vSize.x/2.0f); }
-    float getHalfHeight(void) const { return(m_vSize.y/2.0f); }
-
-private:
-
-	vec2 m_vSize;
-
-};
 
 }
