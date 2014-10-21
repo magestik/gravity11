@@ -16,9 +16,8 @@
 #include <gravity11.h>
 
 #include "CollisionManager.h"
-#include "Solver.h"
-
 #include "Collision.h"
+#include "Solver.h"
 
 namespace gravity11
 {
@@ -50,31 +49,29 @@ void Solver::simulate(float dt_total)
 
 			for (auto it2 = tmp; it2 != end; ++it2)
 			{
-				Collision c;
+                Collision result;
+                bool collided = m_CollisionManager.handleIntersection(*it1, *it2, result);
 
-				bool collision = m_CollisionManager.handleIntersection(*it1, *it2, c);
+                if (collided)
+                {
+                    vec2 vr = (*it1)->getLinearVelocity() - (*it2)->getLinearVelocity();
+                    float e = 10.0f;
+                    vec2 J = (vr * (e + 1.0f)) / ((1.0f/(*it1)->getLinearMass()) + (1.0f/(*it2)->getLinearMass()));
 
-				if (collision)
-				{
-					// This is only temporary ... to test basic collision
-					(*it1)->applyForce((*it1)->getLinearVelocity()*-100);
-					(*it2)->applyForce((*it2)->getLinearVelocity()*-100);
-				}
+                    (*it1)->applyLinearImpulse(J * result.normal);
+                    (*it2)->applyLinearImpulse(J * result.normal * -1);
+                }
+            }
+        }
 
-				// TODO add c to collision list
-			}
-		}
+        for (Body * pBody : m_World)
+        {
+            applyVelocitiesOnBody(pBody, dt);
+            applyForcesOnBody(pBody, dt);
+        }
 
-		for (Body * pBody : m_World)
-		{
-			applyVelocitiesOnBody(pBody, dt);
-			applyForcesOnBody(pBody, dt);
-		}
-
-		// TODO : apply collision forces
-
-		dt_total -= dt;
-	}
+        dt_total -= dt;
+    }
 }
 
 /**

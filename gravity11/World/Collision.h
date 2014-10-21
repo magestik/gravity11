@@ -18,25 +18,9 @@
 namespace gravity11
 {
 
-class BoxAttributes;
-
-class Box : public Shape
+struct Collision
 {
-
-public:
-
-	explicit Box(const BoxAttributes & attr);
-	virtual ~Box(void);
-
-	virtual ShapeType getType(void) { return(BOX); }
-
-    float getHalfWidth(void) const { return(m_vSize.x/2.0f); }
-    float getHalfHeight(void) const { return(m_vSize.y/2.0f); }
-
-private:
-
-	vec2 m_vSize;
-
+    vec2 normal;
 };
 
 }

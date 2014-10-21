@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "../Body/Shape/Shape.h"
+
 namespace gravity11
 {
 
@@ -42,34 +44,26 @@ public:
 	CollisionManager(void);
 	~CollisionManager(void);
 
-	//
-	// Helpers (will do all the cast stuff)
-	//
-
-	bool handleIntersection	(Body * b1,	Body * b2, Collision & c);
+    bool handleIntersection	(Body * b1,	Body * b2, Collision & result);
 
 	template<typename T>
-	bool handleIntersection	(BodyPtr<T> & b1, Body * b2, Collision & c);
+    bool handleIntersection	(BodyPtr<T> & b1, Body * b2, Collision & result);
 
 	//
 	// Real functions starts here
 	//
 
-	bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Box> & pShape, Collision & c);
-	bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Circle> & pShape, Collision & c);
-	bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Segment> & pShape, Collision & c);
+    bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Box> & pShape, Collision & result);
+    bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Circle> & pShape, Collision & result);
+    bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Segment> & pShape, Collision & result);
 
-	bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Box> & pShape, Collision & c);
-	bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Circle> & pShape, Collision & c);
-	bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Segment> & pShape, Collision & c);
+    bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Box> & pShape, Collision & result);
+    bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Circle> & pShape, Collision & result);
+    bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Segment> & pShape, Collision & result);
 
-	bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Box> & pShape, Collision & c);
-	bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Circle> & pShape, Collision & c);
-	bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Segment> & pShape, Collision & c);
-
-private:
-
-	//List<Collision> m_collisions;
+    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Box> & pShape, Collision & result);
+    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Circle> & pShape, Collision & result);
+    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Segment> & pShape, Collision & result);
 };
 
 }
