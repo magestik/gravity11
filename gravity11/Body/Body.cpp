@@ -35,32 +35,64 @@ Body::Body(const BodyModel & model, Shape * pShape)
 , m_fTorque(0.0f)
 , m_fLinearMass(1.0f)
 , m_fAngularMass(1.0f)
-, m_flags(SIMULATING)
+, m_flags(0)
 , m_pShape(pShape)
 , m_pNextBody(nullptr)
 {
 	assert(nullptr != m_pShape);
 
-	if (model.dynamic)
+	fixedPosition(!model.dynamic);
+	fixedRotation(!model.dynamic);
+}
+
+/**
+ * @brief Body::staticPosition
+ * @return
+ */
+bool Body::fixedPosition(void)
+{
+	return(m_flags & FIXED_POSITION);
+}
+
+/**
+ * @brief Body::staticRotation
+ * @return
+ */
+bool Body::fixedRotation(void)
+{
+	return(m_flags & FIXED_ROTATION);
+}
+
+/**
+ * @brief Body::staticPosition
+ * @param b
+ */
+void Body::fixedPosition(bool b)
+{
+	if (b)
 	{
-		setDynamic();
+		m_flags |= FIXED_POSITION;
+	}
+	else
+	{
+		m_flags &= ~FIXED_POSITION;
 	}
 }
 
 /**
- * @brief Body::setStatic
+ * @brief Body::staticRotation
+ * @param b
  */
-void Body::setStatic(void)
+void Body::fixedRotation(bool b)
 {
-	m_flags &= ~DYNAMIC;
-}
-
-/**
- * @brief Body::setDynamic
- */
-void Body::setDynamic(void)
-{
-	m_flags |= DYNAMIC;
+	if (b)
+	{
+		m_flags |= FIXED_ROTATION;
+	}
+	else
+	{
+		m_flags &= ~FIXED_ROTATION;
+	}
 }
 
 /**
@@ -69,7 +101,7 @@ void Body::setDynamic(void)
  */
 void Body::resetForces(const vec2 & force)
 {
-	if (m_flags & DYNAMIC)
+	if (!fixedPosition())
 	{
 		m_vAcceleration = (force / m_fLinearMass);
 	}
@@ -90,10 +122,10 @@ void Body::applyForce(float x, float y)
  */
 void Body::applyForce(const vec2 & force)
 {
-	if (m_flags & DYNAMIC)
+	if (!fixedPosition())
 	{
 		m_vAcceleration = m_vAcceleration + (force / m_fLinearMass);
-		m_flags |= SIMULATING;
+		m_flags &= ~SLEEPING;
 	}
 }
 
@@ -104,12 +136,12 @@ void Body::applyForce(const vec2 & force)
  */
 void Body::applyForce(const vec2 & force, const vec2 & point)
 {
-	if (m_flags & DYNAMIC)
+	if (!fixedPosition())
 	{
 		float torque = cross(point - m_vPosition, force);
 		applyTorque(torque);
 		applyForce(force.x, force.y);
-		m_flags |= SIMULATING;
+		m_flags &= ~SLEEPING;
 	}
 }
 
@@ -119,10 +151,10 @@ void Body::applyForce(const vec2 & force, const vec2 & point)
  */
 void Body::applyTorque(float torque)
 {
-	if (m_flags & DYNAMIC)
+	if (!fixedRotation())
 	{
 		m_fTorque = m_fTorque + (torque / m_fAngularMass);
-		m_flags |= SIMULATING;
+		m_flags &= ~SLEEPING;
 	}
 }
 
@@ -132,10 +164,10 @@ void Body::applyTorque(float torque)
  */
 void Body::applyLinearImpulse(float x, float y)
 {
-	if (m_flags & DYNAMIC)
+	if (!fixedPosition())
 	{
 		m_vLinearVelocity = m_vLinearVelocity + vec2(x, y);
-		m_flags |= SIMULATING;
+		m_flags &= ~SLEEPING;
 	}
 }
 
@@ -145,10 +177,10 @@ void Body::applyLinearImpulse(float x, float y)
  */
 void Body::applyAngularImpulse(float a)
 {
-	if (m_flags & DYNAMIC)
+	if (!fixedRotation())
 	{
 		m_fAngularVelocity = m_fAngularVelocity + a;
-		m_flags |= SIMULATING;
+		m_flags &= ~SLEEPING;
 	}
 }
 

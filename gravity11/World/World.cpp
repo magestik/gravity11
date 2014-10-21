@@ -57,7 +57,7 @@ void World::update(float dt)
 	for (int i = 0; i < step; ++i)
 	{
 		m_pSolver->simulate(m_fTimeStepDuration);
-		}
+	}
 }
 
 /**
@@ -69,7 +69,7 @@ void World::update(float dt)
  */
 Body * World::CreateBody(const BodyModel & model, const BoxAttributes & attr, int count)
 {
-	Box * pShape = new Box(attr);
+	Box * pShape = new Box(attr); // FIXME : memory leak
 	return(CreateBody(model, pShape, count));
 }
 
@@ -82,7 +82,7 @@ Body * World::CreateBody(const BodyModel & model, const BoxAttributes & attr, in
  */
 Body * World::CreateBody(const BodyModel & model, const CircleAttributes attr, int count)
 {
-	Circle * pShape = new Circle(attr);
+	Circle * pShape = new Circle(attr); // FIXME : memory leak
 	return(CreateBody(model, pShape, count));
 }
 
@@ -95,7 +95,7 @@ Body * World::CreateBody(const BodyModel & model, const CircleAttributes attr, i
  */
 Body * World::CreateBody(const BodyModel & model, const SegmentAttributes & attr, int count)
 {
-	Segment * pShape = new Segment(attr);
+	Segment * pShape = new Segment(attr); // FIXME : memory leak
 	return(CreateBody(model, pShape, count));
 }
 

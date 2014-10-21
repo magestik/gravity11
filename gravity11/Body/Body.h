@@ -33,8 +33,11 @@ public:
 
 	explicit	Body                (const BodyModel & v, Shape * pShape);
 
-	void		setStatic           (void);
-	void		setDynamic          (void);
+	bool		fixedPosition		(void);
+	bool		fixedRotation		(void);
+
+	void		fixedPosition		(bool b);
+	void		fixedRotation		(bool b);
 
 	void        resetForces         (const vec2 & force);
 
@@ -58,18 +61,11 @@ public:
 
 private:
 
-	// first bit
-	enum ETypeFlags
+	enum EFlagsBit
 	{
-		STATIC		= 0x0,
-		DYNAMIC		= 0x1,
-	};
-
-	// second bit
-	enum EStateFlags
-	{
-		SIMULATING	= 0x2,
-		SLEEPING	= 0x4,
+		FIXED_POSITION		= 0x1, // first bit
+		FIXED_ROTATION		= 0x2, // second bit
+		SLEEPING			= 0x4, // third bit
 	};
 
 	vec2    m_vPosition;
