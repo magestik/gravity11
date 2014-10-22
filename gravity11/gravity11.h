@@ -27,6 +27,7 @@ namespace gravity11
 	{
 		BOX,
 		CIRCLE,
+        LINE,
 		SEGMENT
 	};
 
@@ -52,10 +53,17 @@ namespace gravity11
 		float radius = 1.0f;
 	};
 
+    struct LineAttributes
+    {
+        vec2 point;
+        vec2 normal;
+    };
+
 	struct SegmentAttributes
 	{
 		float length = 1.0f;
-		float orientation = 1.0f;
+        vec2 point;
+        vec2 normal;
 	};
 }
 

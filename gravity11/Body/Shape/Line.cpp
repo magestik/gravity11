@@ -13,27 +13,28 @@
  * License along with this library.
  */
 
-#pragma once
+#include <gravity11.h>
+
+#include "Shape.h"
+#include "Line.h"
 
 namespace gravity11
 {
 
-class Box;
-class Circle;
-class Line;
-class Segment;
-
-class Shape
+/**
+ * @brief Line::Line
+ */
+Line::Line(const LineAttributes & attr)
 {
-
-public:
-
-	explicit Shape(void);
-	virtual ~Shape(void);
-
-	virtual ShapeType getType(void) = 0;
-
-};
-
+    // ...
 }
 
+/**
+ * @brief Line::~Line
+ */
+Line::~Line(void)
+{
+    // ...
+}
+
+}

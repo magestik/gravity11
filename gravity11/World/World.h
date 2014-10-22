@@ -23,6 +23,7 @@ class Body;
 
 class BoxAttributes;
 class CircleAttributes;
+class LineAttributes;
 class SegmentAttributes;
 
 class World
@@ -49,6 +50,7 @@ public:
 
 	Body *		CreateBody	(const BodyModel & model, const BoxAttributes & attr, int count = 1);
 	Body *		CreateBody	(const BodyModel & model, const CircleAttributes attr, int count = 1);
+    Body *		CreateBody	(const BodyModel & model, const LineAttributes & attr, int count = 1);
 	Body *		CreateBody	(const BodyModel & model, const SegmentAttributes & attr, int count = 1);
 
 	iterator	begin(void)	{ return(iterator(m_pFirstBody)); }

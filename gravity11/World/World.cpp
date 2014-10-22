@@ -22,6 +22,7 @@
 #include "../Body/Shape/Shape.h"
 #include "../Body/Shape/Box.h"
 #include "../Body/Shape/Circle.h"
+#include "../Body/Shape/Line.h"
 #include "../Body/Shape/Segment.h"
 
 namespace gravity11
@@ -83,7 +84,20 @@ Body * World::CreateBody(const BodyModel & model, const BoxAttributes & attr, in
 Body * World::CreateBody(const BodyModel & model, const CircleAttributes attr, int count)
 {
 	Circle * pShape = new Circle(attr); // FIXME : memory leak
-	return(CreateBody(model, pShape, count));
+    return(CreateBody(model, pShape, count));
+}
+
+/**
+ * @brief World::CreateBody
+ * @param model
+ * @param attr
+ * @param count
+ * @return
+ */
+Body * World::CreateBody(const BodyModel &model, const LineAttributes &attr, int count)
+{
+    Line * pShape = new Line(attr); // FIXME : memory leak
+    return(CreateBody(model, pShape, count));
 }
 
 /**

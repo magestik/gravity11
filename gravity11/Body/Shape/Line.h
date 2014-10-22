@@ -18,22 +18,23 @@
 namespace gravity11
 {
 
-class Box;
-class Circle;
-class Line;
-class Segment;
+class LineAttributes;
 
-class Shape
+class Line : public Shape
 {
 
 public:
 
-	explicit Shape(void);
-	virtual ~Shape(void);
+    explicit Line(const LineAttributes & attr);
+    virtual ~Line(void);
 
-	virtual ShapeType getType(void) = 0;
+    virtual ShapeType getType(void) { return(LINE); }
 
+    const vec2 & getNormal(void) { return(m_vNormal); }
+
+private:
+
+    vec2 m_vNormal;
 };
 
 }
-
