@@ -19,7 +19,7 @@ int main (int argc, char ** argv)
 
 		for (gravity11::Body * pBody : world)
 		{
-			gravity11::vec2 & position = pBody->getPosition();
+            const gravity11::vec2 & position = pBody->getPosition();
 			std::cout << position.x << " " << position.y << std::endl;
 		}
 	}

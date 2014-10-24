@@ -50,14 +50,12 @@ public:
     void		applyLinearImpulse	(const vec2 & impulse);
     void		applyAngularImpulse	(float impulse);
 
-	vec2 &          getPosition(void) { return(m_vPosition); }
 	const vec2 &    getPosition(void) const { return(m_vPosition); }
 	float           getRotation(void) const { return(m_fRotation); }
 
     void            setPosition(const vec2 & pos) { m_vPosition = pos; }
     void            setRotation(float rot) { m_fRotation = rot; }
 
-	vec2 &          getLinearVelocity(void) { return(m_vLinearVelocity); }
 	const vec2 &    getLinearVelocity(void) const { return(m_vLinearVelocity); }
 	float			getAngularVelocity(void) const { return(m_fAngularVelocity); }
 

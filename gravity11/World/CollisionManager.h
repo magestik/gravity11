@@ -35,7 +35,7 @@ class CollisionManager
 		BodyPtr(Body * b) : pBody(b) { /* ... */ }
 		BodyPtr(const BodyPtr &) = delete;
 		T * getShape() { return((T*)(pBody->getShape())); }
-		vec2 & getPosition() { return(pBody->getPosition()); }
+        const vec2 & getPosition() { return(pBody->getPosition()); }
 		Body * pBody;
 	};
 
