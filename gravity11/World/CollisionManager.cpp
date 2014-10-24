@@ -302,9 +302,10 @@ bool CollisionManager::handleIntersection(BodyPtr<Line> & pLine, BodyPtr<Circle>
     vec2 QP = pShape.getPosition() - pLine.getPosition();
     const vec2 & n = pLine.getShape()->getNormal();
 
+    float r = pShape.getShape()->getRadius();
     float d = dot(QP, n) / norm(n);
 
-    if (d < pShape.getShape()->getRadius())
+    if (d*d < r*r)
     {
         result.normal = n;
         return(true);

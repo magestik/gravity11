@@ -25,6 +25,7 @@ namespace gravity11
  * @brief Line::Line
  */
 Line::Line(const LineAttributes & attr)
+: m_vNormal(attr.normal)
 {
     // ...
 }

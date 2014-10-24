@@ -54,9 +54,15 @@ public:
 	const vec2 &    getPosition(void) const { return(m_vPosition); }
 	float           getRotation(void) const { return(m_fRotation); }
 
+    void            setPosition(const vec2 & pos) { m_vPosition = pos; }
+    void            setRotation(float rot) { m_fRotation = rot; }
+
 	vec2 &          getLinearVelocity(void) { return(m_vLinearVelocity); }
 	const vec2 &    getLinearVelocity(void) const { return(m_vLinearVelocity); }
 	float			getAngularVelocity(void) const { return(m_fAngularVelocity); }
+
+    void            setLinearVelocity(const vec2 & vel) { m_vLinearVelocity = vel; }
+    void            setAngular(float vel) { m_fAngularVelocity = vel; }
 
     float           getLinearMass(void) const { return(m_fLinearMass); }
     float           getAngularMass(void) const { return(m_fAngularMass); }

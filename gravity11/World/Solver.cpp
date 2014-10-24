@@ -54,9 +54,10 @@ void Solver::simulate(float dt_total)
 
                 if (collided)
                 {
-                    vec2 vr = (*it1)->getLinearVelocity() - (*it2)->getLinearVelocity();
-                    float e = 10.0f;
-                    vec2 J = (vr * (e + 1.0f)) / ((1.0f/(*it1)->getLinearMass()) + (1.0f/(*it2)->getLinearMass()));
+                    vec2 relative = (*it2)->getLinearVelocity() - (*it1)->getLinearVelocity();
+
+                    float restitution = 2.0f;
+                    float J = ((1.0f + restitution) * dot(relative, result.normal)) / ((1.0f/(*it1)->getLinearMass()) + (1.0f/(*it2)->getLinearMass()));
 
                     (*it1)->applyLinearImpulse(J * result.normal);
                     (*it2)->applyLinearImpulse(J * result.normal * -1);
