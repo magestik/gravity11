@@ -58,10 +58,12 @@ void Solver::simulate(float dt_total)
 
 					float tmp = dot(relative, result.normal);
 
+					//vec2 tangent = relative - tmp * result.normal;
+
 					if (tmp > 0.0f)
 					{
 						float restitution = 0.9f;
-						float J = - ((1.0f + restitution) * tmp) / ((1.0f/(*it1)->getLinearMass()) + (1.0f/(*it2)->getLinearMass()));
+						float J = - ((1.0f + restitution) * tmp) / ((*it1)->getInvLinearMass() + (*it2)->getInvLinearMass());
 
 						(*it1)->applyLinearImpulse(J * result.normal * -1);
 						(*it2)->applyLinearImpulse(J * result.normal);

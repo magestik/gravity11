@@ -62,8 +62,8 @@ public:
 	void            setLinearVelocity(const vec2 & vel) { m_vLinearVelocity = vel; }
 	void            setAngular(float vel) { m_fAngularVelocity = vel; }
 
-	float           getLinearMass(void) const { return(fixedPosition() ? INFINITY : m_fLinearMass); }
-	float           getAngularMass(void) const { return(fixedRotation() ? INFINITY : m_fAngularMass); }
+	float           getInvLinearMass(void) const { return(fixedPosition() ? 0.0f : m_fInvLinearMass); }
+	float           getInvAngularMass(void) const { return(fixedRotation() ? 0.0f : m_fInvAngularMass); }
 
 	Shape *         getShape(void) { return(m_pShape); }
 
@@ -85,8 +85,8 @@ private:
 	vec2    m_vAcceleration;
 	float   m_fTorque;
 
-	float   m_fLinearMass;
-	float   m_fAngularMass;
+	float   m_fInvLinearMass; // inverse of the linear mass
+	float   m_fInvAngularMass; // inverse of the angular mass
 
 	int     m_flags;
 

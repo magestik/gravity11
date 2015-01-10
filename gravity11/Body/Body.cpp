@@ -33,8 +33,8 @@ Body::Body(const BodyModel & model, Shape * pShape)
 , m_fAngularVelocity(0.0f)
 , m_vAcceleration(0.0f, 0.0f)
 , m_fTorque(0.0f)
-, m_fLinearMass(1.0f)
-, m_fAngularMass(1.0f)
+, m_fInvLinearMass(1.0f)
+, m_fInvAngularMass(1.0f)
 , m_flags(0)
 , m_pShape(pShape)
 , m_pNextBody(nullptr)
@@ -103,7 +103,7 @@ void Body::resetForces(const vec2 & force)
 {
 	if (!fixedPosition())
 	{
-		m_vAcceleration = (force / m_fLinearMass);
+		m_vAcceleration = (force * m_fInvLinearMass);
 	}
 }
 
@@ -124,7 +124,7 @@ void Body::applyForce(const vec2 & force)
 {
 	if (!fixedPosition())
 	{
-		m_vAcceleration = m_vAcceleration + (force / m_fLinearMass);
+		m_vAcceleration += (force * m_fInvLinearMass);
 		m_flags &= ~SLEEPING;
 	}
 }
@@ -153,7 +153,7 @@ void Body::applyTorque(float torque)
 {
 	if (!fixedRotation())
 	{
-		m_fTorque = m_fTorque + (torque / m_fAngularMass);
+		m_fTorque += (torque * m_fInvAngularMass);
 		m_flags &= ~SLEEPING;
 	}
 }
@@ -175,7 +175,7 @@ void Body::applyLinearImpulse(const vec2 & impulse)
 {
 	if (!fixedPosition())
 	{
-		m_vLinearVelocity = m_vLinearVelocity + (impulse / m_fLinearMass);
+		m_vLinearVelocity += (impulse * m_fInvLinearMass);
 		m_flags &= ~SLEEPING;
 	}
 }
@@ -189,7 +189,7 @@ void Body::applyAngularImpulse(float impulse)
 {
 	if (!fixedRotation())
 	{
-		m_fAngularVelocity = m_fAngularVelocity + (impulse / m_fAngularMass);
+		m_fAngularVelocity += (impulse * m_fInvAngularMass);
 		m_flags &= ~SLEEPING;
 	}
 }
