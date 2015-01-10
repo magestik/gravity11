@@ -20,7 +20,8 @@ namespace gravity11
 
 struct Collision
 {
-    vec2 normal;
+	vec2 normal;
+	float invMassTotal;
 };
 
 }

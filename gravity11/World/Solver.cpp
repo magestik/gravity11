@@ -54,20 +54,16 @@ void Solver::simulate(float dt_total)
 
 				if (collided)
 				{
-					vec2 relative = (*it2)->getLinearVelocity() - (*it1)->getLinearVelocity();
+					result.invMassTotal = (*it1)->getInvLinearMass() + (*it2)->getInvLinearMass();
 
-					float tmp = dot(relative, result.normal);
+					vec2 relative2 = (*it2)->getLinearVelocity() - (*it1)->getLinearVelocity();
+					applyResponse(*it2, relative2, result);
 
-					//vec2 tangent = relative - tmp * result.normal;
+					result.normal.x = - result.normal.x;
+					result.normal.y = - result.normal.y;
 
-					if (tmp > 0.0f)
-					{
-						float restitution = 0.9f;
-						float J = - ((1.0f + restitution) * tmp) / ((*it1)->getInvLinearMass() + (*it2)->getInvLinearMass());
-
-						(*it1)->applyLinearImpulse(J * result.normal * -1);
-						(*it2)->applyLinearImpulse(J * result.normal);
-					}
+					vec2 relative1 = (*it1)->getLinearVelocity() - (*it2)->getLinearVelocity();
+					applyResponse(*it1, relative1, result);
 				}
 			}
 		}
@@ -79,6 +75,25 @@ void Solver::simulate(float dt_total)
 		}
 
 		dt_total -= dt;
+	}
+}
+
+/**
+ * @brief Solver::applyResponse
+ * @param pBody
+ * @param result
+ */
+void Solver::applyResponse(Body * pBody, const vec2 & relative, const Collision & result)
+{
+	float tmp = dot(relative, result.normal);
+
+	if (tmp > 0.0f)
+	{
+		const float restitution = 0.9f;
+
+		float Fn = - ((1.0f + restitution) * tmp) / result.invMassTotal;
+
+		pBody->applyLinearImpulse(Fn * result.normal);
 	}
 }
 

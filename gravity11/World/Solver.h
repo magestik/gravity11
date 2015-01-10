@@ -31,14 +31,15 @@ public:
 
 protected:
 
+	void applyResponse(Body * pBody, const vec2 & relative, const Collision & result);
 	void applyForcesOnBody(Body * pBody, float dt);
-    void applyVelocitiesOnBody(Body * pBody, float dt);
+	void applyVelocitiesOnBody(Body * pBody, float dt);
 
 private:
 
 	World & m_World;
 
-    CollisionManager m_CollisionManager;
+	CollisionManager m_CollisionManager;
 };
 
 }

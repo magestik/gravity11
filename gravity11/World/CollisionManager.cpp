@@ -247,12 +247,18 @@ bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Cir
 	float radius		= pCircle.getShape()->getRadius() + pShape.getShape()->getRadius();
 
 	float dx = fabs(pos1.x - pos2.x);
-	float dy = fabs(pos1.x - pos2.x);
+	float dy = fabs(pos1.y - pos2.y);
 
 	float d = (dx*dx) + (dy*dy);
 	float r = radius * radius;
 
-	return(d < r);
+	if (d < r)
+	{
+		result.normal = normalize(pos1 - pos2);
+		return(true);
+	}
+
+	return(false);
 }
 
 /**
@@ -264,7 +270,10 @@ bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Cir
  */
 bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Line> & pShape, Collision & result)
 {
-	return(handleIntersection(pShape, pCircle, result));
+	bool collided = handleIntersection(pShape, pCircle, result);
+	result.normal.x = - result.normal.x;
+	result.normal.y = - result.normal.y;
+	return(collided);
 }
 
 /**

@@ -107,6 +107,11 @@ inline float distance(const vec2 & v1, const vec2 & v2)
 	return(norm(v1-v2));
 }
 
+inline float abs(const float v)
+{
+	return(fabsf(v));
+}
+
 inline vec2 abs(const vec2 & v)
 {
 	vec2 r(fabs(v.x), fabs(v.y));
