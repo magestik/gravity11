@@ -49,7 +49,7 @@ Body::Body(const BodyModel & model, Shape * pShape)
  * @brief Body::staticPosition
  * @return
  */
-bool Body::fixedPosition(void)
+bool Body::fixedPosition(void) const
 {
 	return(m_flags & FIXED_POSITION);
 }
@@ -58,7 +58,7 @@ bool Body::fixedPosition(void)
  * @brief Body::staticRotation
  * @return
  */
-bool Body::fixedRotation(void)
+bool Body::fixedRotation(void) const
 {
 	return(m_flags & FIXED_ROTATION);
 }

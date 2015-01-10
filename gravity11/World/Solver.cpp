@@ -49,30 +49,35 @@ void Solver::simulate(float dt_total)
 
 			for (auto it2 = tmp; it2 != end; ++it2)
 			{
-                Collision result;
-                bool collided = m_CollisionManager.handleIntersection(*it1, *it2, result);
+				Collision result;
+				bool collided = m_CollisionManager.handleIntersection(*it1, *it2, result);
 
-                if (collided)
-                {
-                    vec2 relative = (*it2)->getLinearVelocity() - (*it1)->getLinearVelocity();
+				if (collided)
+				{
+					vec2 relative = (*it2)->getLinearVelocity() - (*it1)->getLinearVelocity();
 
-                    float restitution = 2.0f;
-                    float J = ((1.0f + restitution) * dot(relative, result.normal)) / ((1.0f/(*it1)->getLinearMass()) + (1.0f/(*it2)->getLinearMass()));
+					float tmp = dot(relative, result.normal);
 
-                    (*it1)->applyLinearImpulse(J * result.normal);
-                    (*it2)->applyLinearImpulse(J * result.normal * -1);
-                }
-            }
-        }
+					if (tmp > 0.0f)
+					{
+						float restitution = 0.9f;
+						float J = - ((1.0f + restitution) * tmp) / ((1.0f/(*it1)->getLinearMass()) + (1.0f/(*it2)->getLinearMass()));
 
-        for (Body * pBody : m_World)
-        {
-            applyVelocitiesOnBody(pBody, dt);
-            applyForcesOnBody(pBody, dt);
-        }
+						(*it1)->applyLinearImpulse(J * result.normal * -1);
+						(*it2)->applyLinearImpulse(J * result.normal);
+					}
+				}
+			}
+		}
 
-        dt_total -= dt;
-    }
+		for (Body * pBody : m_World)
+		{
+			applyVelocitiesOnBody(pBody, dt);
+			applyForcesOnBody(pBody, dt);
+		}
+
+		dt_total -= dt;
+	}
 }
 
 /**
@@ -90,19 +95,20 @@ void Solver::applyForcesOnBody(Body * pBody, float dt)
 /**
  * @brief Solver::updateBody
  * @param pBody : body we want to update position/velocity
+ * Integration Euler Semi-Implicite (symplectique)
  */
 void Solver::applyVelocitiesOnBody(Body * pBody, float dt)
 {
 	if (!pBody->fixedPosition())
 	{
-		pBody->m_vLinearVelocity    = pBody->m_vLinearVelocity + pBody->m_vAcceleration * dt;
-		pBody->m_vPosition          = pBody->m_vPosition + pBody->m_vLinearVelocity * dt;
+		pBody->m_vLinearVelocity    += pBody->m_vAcceleration * dt;
+		pBody->m_vPosition          += pBody->m_vLinearVelocity * dt;
 	}
 
 	if (!pBody->fixedRotation())
 	{
-		pBody->m_fAngularVelocity   = pBody->m_fAngularVelocity + pBody->m_fTorque * dt;
-		pBody->m_fRotation          = pBody->m_fRotation + pBody->m_fAngularVelocity * dt;
+		pBody->m_fAngularVelocity   = pBody->m_fTorque * dt;
+		pBody->m_fRotation          = pBody->m_fAngularVelocity * dt;
 	}
 
 	//onUpdate();

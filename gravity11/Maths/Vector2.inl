@@ -1,4 +1,36 @@
 // -----------------------------------------
+// Vector op = Vector
+// -----------------------------------------
+
+inline vec2 & operator *= (vec2 & a, const vec2 & b)
+{
+	a.x *= b.x;
+	a.y *= b.y;
+	return(a);
+}
+
+inline vec2 & operator /= (vec2 & a, const vec2 & b)
+{
+	a.x /= b.x;
+	a.y /= b.y;
+	return(a);
+}
+
+inline vec2 & operator += (vec2 & a, const vec2 & b)
+{
+	a.x += b.x;
+	a.y += b.y;
+	return(a);
+}
+
+inline vec2 & operator -= (vec2 & a, const vec2 & b)
+{
+	a.x -= b.x;
+	a.y -= b.y;
+	return(a);
+}
+
+// -----------------------------------------
 // Vector op Vector
 // -----------------------------------------
 

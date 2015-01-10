@@ -33,8 +33,8 @@ public:
 
 	explicit	Body                (const BodyModel & v, Shape * pShape);
 
-	bool		fixedPosition		(void);
-	bool		fixedRotation		(void);
+	bool		fixedPosition		(void) const;
+	bool		fixedRotation		(void) const;
 
 	void		fixedPosition		(bool b);
 	void		fixedRotation		(bool b);
@@ -47,23 +47,23 @@ public:
 	void        applyTorque         (float torque);
 
 	void		applyLinearImpulse	(float x, float y);
-    void		applyLinearImpulse	(const vec2 & impulse);
-    void		applyAngularImpulse	(float impulse);
+	void		applyLinearImpulse	(const vec2 & impulse);
+	void		applyAngularImpulse	(float impulse);
 
 	const vec2 &    getPosition(void) const { return(m_vPosition); }
 	float           getRotation(void) const { return(m_fRotation); }
 
-    void            setPosition(const vec2 & pos) { m_vPosition = pos; }
-    void            setRotation(float rot) { m_fRotation = rot; }
+	void            setPosition(const vec2 & pos) { m_vPosition = pos; }
+	void            setRotation(float rot) { m_fRotation = rot; }
 
 	const vec2 &    getLinearVelocity(void) const { return(m_vLinearVelocity); }
 	float			getAngularVelocity(void) const { return(m_fAngularVelocity); }
 
-    void            setLinearVelocity(const vec2 & vel) { m_vLinearVelocity = vel; }
-    void            setAngular(float vel) { m_fAngularVelocity = vel; }
+	void            setLinearVelocity(const vec2 & vel) { m_vLinearVelocity = vel; }
+	void            setAngular(float vel) { m_fAngularVelocity = vel; }
 
-    float           getLinearMass(void) const { return(m_fLinearMass); }
-    float           getAngularMass(void) const { return(m_fAngularMass); }
+	float           getLinearMass(void) const { return(fixedPosition() ? INFINITY : m_fLinearMass); }
+	float           getAngularMass(void) const { return(fixedRotation() ? INFINITY : m_fAngularMass); }
 
 	Shape *         getShape(void) { return(m_pShape); }
 
