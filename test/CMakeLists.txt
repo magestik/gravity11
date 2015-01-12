@@ -1,3 +1,4 @@
+add_subdirectory(ga)
 
 add_subdirectory(simple)
 add_subdirectory(ball)

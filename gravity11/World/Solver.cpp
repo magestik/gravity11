@@ -29,7 +29,7 @@ namespace gravity11
 Solver::Solver(World & world)
 : m_World(world)
 {
-
+	// ...
 }
 
 /**
@@ -49,21 +49,15 @@ void Solver::simulate(float dt_total)
 
 			for (auto it2 = tmp; it2 != end; ++it2)
 			{
-				Collision result;
-				bool collided = m_CollisionManager.handleIntersection(*it1, *it2, result);
+				Collision result1;
+				Collision result2;
+
+				bool collided = m_CollisionManager.handleIntersection(*it1, *it2, result1, result2);
 
 				if (collided)
 				{
-					result.invMassTotal = (*it1)->getInvLinearMass() + (*it2)->getInvLinearMass();
-
-					vec2 relative2 = (*it2)->getLinearVelocity() - (*it1)->getLinearVelocity();
-					applyResponse(*it2, relative2, result);
-
-					result.normal.x = - result.normal.x;
-					result.normal.y = - result.normal.y;
-
-					vec2 relative1 = (*it1)->getLinearVelocity() - (*it2)->getLinearVelocity();
-					applyResponse(*it1, relative1, result);
+					applyResponse(*it1, result1);
+					applyResponse(*it2, result2);
 				}
 			}
 		}
@@ -83,17 +77,24 @@ void Solver::simulate(float dt_total)
  * @param pBody
  * @param result
  */
-void Solver::applyResponse(Body * pBody, const vec2 & relative, const Collision & result)
+void Solver::applyResponse(Body * pBody, const Collision & result)
 {
-	float tmp = dot(relative, result.normal);
+	float tmp = dot(result.relativeVelocity, result.normal);
 
 	if (tmp > 0.0f)
 	{
-		const float restitution = 0.9f;
+		const float restitution = 0.7f;
 
 		float Fn = - ((1.0f + restitution) * tmp) / result.invMassTotal;
 
 		pBody->applyLinearImpulse(Fn * result.normal);
+
+		vec2 velocity = pBody->getLinearVelocity();
+
+		if (norm(velocity) < 0.05f)
+		{
+			pBody->Sleeping(true);
+		}
 	}
 }
 
@@ -116,16 +117,19 @@ void Solver::applyForcesOnBody(Body * pBody, float dt)
  */
 void Solver::applyVelocitiesOnBody(Body * pBody, float dt)
 {
-	if (!pBody->fixedPosition())
+	if (!pBody->Sleeping())
 	{
-		pBody->m_vLinearVelocity    += pBody->m_vAcceleration * dt;
-		pBody->m_vPosition          += pBody->m_vLinearVelocity * dt;
-	}
+		if (!pBody->fixedPosition())
+		{
+			pBody->m_vLinearVelocity    += pBody->m_vAcceleration * dt;
+			pBody->m_vPosition          += pBody->m_vLinearVelocity * dt;
+		}
 
-	if (!pBody->fixedRotation())
-	{
-		pBody->m_fAngularVelocity   = pBody->m_fTorque * dt;
-		pBody->m_fRotation          = pBody->m_fAngularVelocity * dt;
+		if (!pBody->fixedRotation())
+		{
+			pBody->m_fAngularVelocity   = pBody->m_fTorque * dt;
+			pBody->m_fRotation          = pBody->m_fAngularVelocity * dt;
+		}
 	}
 
 	//onUpdate();

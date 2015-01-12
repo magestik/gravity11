@@ -39,6 +39,9 @@ public:
 	void		fixedPosition		(bool b);
 	void		fixedRotation		(bool b);
 
+	void		Sleeping			(bool s);
+	bool		Sleeping			(void);
+
 	void        resetForces         (const vec2 & force);
 
 	void        applyForce          (float x, float y);

@@ -25,6 +25,7 @@
 #include "../Body/Shape/Line.h"
 #include "../Body/Shape/Segment.h"
 
+#define sign(d) ((d > 0) ? 1 : -1)
 namespace gravity11
 {
 
@@ -49,7 +50,7 @@ CollisionManager::~CollisionManager(void)
  * @param b1
  * @param b2
  */
-bool CollisionManager::handleIntersection(Body * b1, Body * b2, Collision & result)
+bool CollisionManager::handleIntersection(Body * b1, Body * b2, Collision & result1, Collision & result2)
 {
 	bool collision = false;
 
@@ -60,30 +61,35 @@ bool CollisionManager::handleIntersection(Body * b1, Body * b2, Collision & resu
 		case BOX:
 		{
 			BodyPtr<Box> pTypedBody(b1);
-			collision = handleIntersection(pTypedBody, b2, result);
+			collision = handleIntersection(pTypedBody, b2, result2);
 		}
 		break;
 
 		case CIRCLE:
 		{
 			BodyPtr<Circle> pTypedBody(b1);
-			collision = handleIntersection(pTypedBody, b2, result);
+			collision = handleIntersection(pTypedBody, b2, result2);
 		}
 		break;
 
 		case LINE:
 		{
 			BodyPtr<Line> pTypedBody(b1);
-			collision = handleIntersection(pTypedBody, b2, result);
+			collision = handleIntersection(pTypedBody, b2, result2);
 		}
 		break;
+	}
 
-		case SEGMENT:
-		{
-			BodyPtr<Segment> pTypedBody(b1);
-			collision = handleIntersection(pTypedBody, b2, result);
-		}
-		break;
+	if (collision)
+	{
+		result2.invMassTotal		= b1->getInvLinearMass() + b2->getInvLinearMass();
+		result2.relativeVelocity	= b2->getLinearVelocity() - b1->getLinearVelocity();
+
+		result1.normal.x			= - result2.normal.x;
+		result1.normal.y			= - result2.normal.y;
+		result1.relativeVelocity.x	= - result2.relativeVelocity.x;
+		result1.relativeVelocity.y	= - result2.relativeVelocity.y;
+		result1.invMassTotal		= result2.invMassTotal;
 	}
 
 	return(collision);
@@ -115,9 +121,9 @@ bool CollisionManager::handleIntersection(BodyPtr<T> & pTypedBody1, Body * b2, C
 		}
 		break;
 
-		case SEGMENT:
+		case LINE:
 		{
-			BodyPtr<Segment> pTypedBody2(b2);
+			BodyPtr<Line> pTypedBody2(b2);
 			collision = handleIntersection(pTypedBody1, pTypedBody2, result);
 		}
 		break;
@@ -134,6 +140,48 @@ bool CollisionManager::handleIntersection(BodyPtr<T> & pTypedBody1, Body * b2, C
  */
 bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Box> & pShape, Collision & result)
 {
+	const vec2 & pos1	= pBox.getPosition();
+	const vec2 & pos2	= pShape.getPosition();
+
+	float halfWidth1	= pBox.getShape()->getHalfWidth();
+	float halfHeight1	= pBox.getShape()->getHalfHeight();
+
+	float halfWidth2	= pShape.getShape()->getHalfWidth();
+	float halfHeight2	= pShape.getShape()->getHalfHeight();
+
+	float dx = pos1.x - pos2.x;
+	float dy = pos1.y - pos2.y;
+
+	if (fabsf(dx) > (halfWidth1 + halfWidth2))
+	{
+		return false;
+	}
+
+	if (fabsf(dy) > (halfHeight1 + halfHeight2))
+	{
+		return false;
+	}
+
+	// left/right
+	if (fabsf(dx) < halfWidth1+halfWidth2)
+	{
+		if (fabsf(dy) < halfHeight1)
+		{
+			result.normal = vec2(sign(dx), 0.0f);
+			return(true);
+		}
+	}
+
+	// top/bottom
+	if (fabsf(dy) < halfHeight1+halfHeight2)
+	{
+		if (fabsf(dx) < halfWidth1)
+		{
+			result.normal = vec2(0.0f, sign(dy));
+			return(true);
+		}
+	}
+
 	return(false);
 }
 
@@ -158,20 +206,12 @@ bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Circle> &
  * @param result
  * @return
  */
-bool CollisionManager::handleIntersection(BodyPtr<Box> &pBox, BodyPtr<Line> &pShape, Collision &result)
+bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Line> & pShape, Collision &result)
 {
-	return(false);
-}
-
-/**
- * @brief CollisionManager::handleIntersection
- * @param pBox
- * @param pShape
- * @return
- */
-bool CollisionManager::handleIntersection(BodyPtr<Box> & pBox, BodyPtr<Segment> & pShape, Collision & result)
-{
-	return(false);
+	bool collided = handleIntersection(pShape, pBox, result);
+	result.normal.x = - result.normal.x;
+	result.normal.y = - result.normal.y;
+	return(collided);
 }
 
 /**
@@ -189,45 +229,45 @@ bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Box
 	float halfHeight	= pShape.getShape()->getHalfHeight();
 	float radius		= pCircle.getShape()->getRadius();
 
-	// Test X-distance
-	float dx = fabs(pos1.x - pos2.x);
+	float dx = pos1.x - pos2.x;
+	float dy = pos1.y - pos2.y;
 
-	if (dx > (halfWidth + radius))
+	if (fabsf(dx) > (halfWidth + radius))
 	{
 		return(false);
 	}
 
-	// Test Y-distance
-	float dy = fabs(pos1.y - pos2.y);
-
-	if (dy > (halfHeight + radius))
+	if (fabsf(dy) > (halfHeight + radius))
 	{
 		return(false);
 	}
 
-	// Is the collision happening ?
-	if (dx <= halfWidth)
+	// left/right
+	if (fabsf(dx) < halfWidth+radius)
 	{
-		result.normal = vec2(-1.0f, 0.0f);
-		return(true);
+		if (fabsf(dy) < halfHeight)
+		{
+			result.normal = vec2(sign(dx), 0.0f);
+			return(true);
+		}
 	}
 
-	if (dy <= halfHeight)
+	// top/bottom
+	if (fabsf(dy) < halfHeight+radius)
 	{
-		result.normal = vec2(0.0f, -1.0f);
-		return(true);
+		if (fabsf(dx) < halfWidth)
+		{
+			result.normal = vec2(0.0f, sign(dy));
+			return(true);
+		}
 	}
 
-	// Test corner distance
-	float cornerDistX = dx - halfWidth;
-	float cornerDistY = dy - halfHeight;
+	// corners
+	float max_distance = (halfWidth*halfWidth) + (halfHeight*halfHeight) + radius;
 
-	float d = (cornerDistX*cornerDistX) + (cornerDistY*cornerDistY);
-	float r = radius * radius;
-
-	if (d < r)
+	if ((dx*dx+dy*dy) < max_distance)
 	{
-		result.normal = normalize(vec2(-0.5f, -0.5f));
+		result.normal = normalize(vec2(sign(dx), sign(dy)));
 		return(true);
 	}
 
@@ -278,17 +318,6 @@ bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Lin
 
 /**
  * @brief CollisionManager::handleIntersection
- * @param pCircle
- * @param pShape
- * @return
- */
-bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Segment> & pShape, Collision & result)
-{
-	return(handleIntersection(pShape, pCircle, result));
-}
-
-/**
- * @brief CollisionManager::handleIntersection
  * @param pLine
  * @param pShape
  * @param result
@@ -296,6 +325,32 @@ bool CollisionManager::handleIntersection(BodyPtr<Circle> & pCircle, BodyPtr<Seg
  */
 bool CollisionManager::handleIntersection(BodyPtr<Line> & pLine, BodyPtr<Box> & pShape, Collision & result)
 {
+	const vec2 & pos1	= pLine.getPosition();
+	const vec2 & pos2	= pShape.getPosition();
+
+	float halfWidth		= pShape.getShape()->getHalfWidth();
+	float halfHeight	= pShape.getShape()->getHalfHeight();
+
+	vec2 n = pLine.getShape()->getNormal();
+
+	if (pos1.x > (pos2.x - halfWidth) && pos1.x < (pos2.x + halfWidth))
+	{
+		if (0.0f == n.y)
+		{
+			result.normal = n;
+			return(true);
+		}
+	}
+
+	if (pos1.y > (pos2.y - halfHeight) && pos1.y < (pos2.y + halfHeight))
+	{
+		if (0.0f == n.x)
+		{
+			result.normal = n;
+			return(true);
+		}
+	}
+
 	return(false);
 }
 
@@ -332,63 +387,7 @@ bool CollisionManager::handleIntersection(BodyPtr<Line> & pLine, BodyPtr<Circle>
  */
 bool CollisionManager::handleIntersection(BodyPtr<Line> & pLine, BodyPtr<Line> & pShape, Collision & result)
 {
-	return(false);
-}
-
-/**
- * @brief CollisionManager::handleIntersection
- * @param pLine
- * @param pShape
- * @param result
- * @return
- */
-bool CollisionManager::handleIntersection(BodyPtr<Line> & pLine, BodyPtr<Segment> & pShape, Collision & result)
-{
-	return(false);
-}
-
-/**
- * @brief CollisionManager::handleIntersection
- * @param pSegment
- * @param pShape
- * @return
- */
-bool CollisionManager::handleIntersection(BodyPtr<Segment> & pSegment, BodyPtr<Box> & pShape, Collision & result)
-{
-	return(handleIntersection(pShape, pSegment, result));
-}
-
-/**
- * @brief CollisionManager::handleIntersection
- * @param pSegment
- * @param pShape
- * @return
- */
-bool CollisionManager::handleIntersection(BodyPtr<Segment> & pSegment, BodyPtr<Circle> & pShape, Collision & result)
-{
-	return(false);
-}
-
-/**
- * @brief CollisionManager::handleIntersection
- * @param pSegment
- * @param pShape
- * @param result
- * @return
- */
-bool CollisionManager::handleIntersection(BodyPtr<Segment> & pSegment, BodyPtr<Line> & pShape, Collision & result)
-{
-	return(false);
-}
-
-/**
- * @brief CollisionManager::handleIntersection
- * @param pSegment
- * @param pShape
- * @return
- */
-bool CollisionManager::handleIntersection(BodyPtr<Segment> & pSegment, BodyPtr<Segment> & pShape, Collision & result)
-{
+	// TODO
 	return(false);
 }
 

@@ -96,6 +96,30 @@ void Body::fixedRotation(bool b)
 }
 
 /**
+ * @brief Body::setSleeping
+ */
+void Body::Sleeping(bool s)
+{
+	if (s)
+	{
+		m_flags |= SLEEPING;
+	}
+	else
+	{
+		m_flags &= ~SLEEPING;
+	}
+}
+
+/**
+ * @brief Body::Sleeping
+ * @return
+ */
+bool Body::Sleeping(void)
+{
+	return(m_flags & SLEEPING);
+}
+
+/**
  * @brief Body::resetForces
  * @param force
  */

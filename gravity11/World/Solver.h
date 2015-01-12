@@ -31,7 +31,7 @@ public:
 
 protected:
 
-	void applyResponse(Body * pBody, const vec2 & relative, const Collision & result);
+	void applyResponse(Body * pBody, const Collision & result);
 	void applyForcesOnBody(Body * pBody, float dt);
 	void applyVelocitiesOnBody(Body * pBody, float dt);
 

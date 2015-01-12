@@ -20,7 +20,10 @@ namespace gravity11
 
 struct Collision
 {
+	explicit Collision(void) : normal(0.0, 0.0f), relativeVelocity(0.0f, 0.0f), invMassTotal(0.0f) { /* ... */ }
+
 	vec2 normal;
+	vec2 relativeVelocity;
 	float invMassTotal;
 };
 

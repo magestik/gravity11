@@ -30,8 +30,8 @@ public:
 
 	virtual ShapeType getType(void) { return(BOX); }
 
-    float getHalfWidth(void) const { return(m_vSize.x/2.0f); }
-    float getHalfHeight(void) const { return(m_vSize.y/2.0f); }
+	float getHalfWidth(void) const { return(m_vSize.x); }
+	float getHalfHeight(void) const { return(m_vSize.y); }
 
 private:
 

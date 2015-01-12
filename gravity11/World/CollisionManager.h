@@ -35,7 +35,7 @@ class CollisionManager
 		BodyPtr(Body * b) : pBody(b) { /* ... */ }
 		BodyPtr(const BodyPtr &) = delete;
 		T * getShape() { return((T*)(pBody->getShape())); }
-        const vec2 & getPosition() { return(pBody->getPosition()); }
+		const vec2 & getPosition() { return(pBody->getPosition()); }
 		Body * pBody;
 	};
 
@@ -44,34 +44,34 @@ public:
 	CollisionManager(void);
 	~CollisionManager(void);
 
-    bool handleIntersection	(Body * b1,	Body * b2, Collision & result);
+	bool handleIntersection	(Body * b1,	Body * b2, Collision & result1, Collision & result2);
 
 	template<typename T>
-    bool handleIntersection	(BodyPtr<T> & b1, Body * b2, Collision & result);
+	bool handleIntersection	(BodyPtr<T> & b1, Body * b2, Collision & result);
 
 	//
 	// Real functions starts here
 	//
 
-    bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Box> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Circle> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Line> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Segment> & pShape, Collision & result);
+	bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Box> & pShape, Collision & result);
+	bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Circle> & pShape, Collision & result);
+	bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Line> & pShape, Collision & result);
+///    bool handleIntersection (BodyPtr<Box> & pBox, BodyPtr<Segment> & pShape, Collision & result);
 
-    bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Box> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Circle> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Line> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Segment> & pShape, Collision & result);
+	bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Box> & pShape, Collision & result);
+	bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Circle> & pShape, Collision & result);
+	bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Line> & pShape, Collision & result);
+///    bool handleIntersection (BodyPtr<Circle> & pCircle, BodyPtr<Segment> & pShape, Collision & result);
 
-    bool handleIntersection (BodyPtr<Line> & pLine, BodyPtr<Box> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Line> & pLine, BodyPtr<Circle> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Line> & pLine, BodyPtr<Line> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Line> & pLine, BodyPtr<Segment> & pShape, Collision & result);
+	bool handleIntersection (BodyPtr<Line> & pLine, BodyPtr<Box> & pShape, Collision & result);
+	bool handleIntersection (BodyPtr<Line> & pLine, BodyPtr<Circle> & pShape, Collision & result);
+	bool handleIntersection (BodyPtr<Line> & pLine, BodyPtr<Line> & pShape, Collision & result);
+///    bool handleIntersection (BodyPtr<Line> & pLine, BodyPtr<Segment> & pShape, Collision & result);
 
-    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Box> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Circle> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Line> & pShape, Collision & result);
-    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Segment> & pShape, Collision & result);
+///   bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Box> & pShape, Collision & result);
+///    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Circle> & pShape, Collision & result);
+///    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Line> & pShape, Collision & result);
+///    bool handleIntersection (BodyPtr<Segment> & pSegment, BodyPtr<Segment> & pShape, Collision & result);
 };
 
 }
